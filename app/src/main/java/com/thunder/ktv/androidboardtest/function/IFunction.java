@@ -8,7 +8,7 @@ import android.view.View;
 
 public abstract class IFunction {
     public FunctionBase functionBase = null;
-    abstract public boolean doFunction(Object o, View view);
+    abstract public boolean doFunction(Object o);
 
     @Override
     public String toString() {

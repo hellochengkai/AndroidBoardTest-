@@ -65,28 +65,35 @@ public class MyListViewAdapter extends RecyclerView.Adapter<MyListViewAdapter.Vi
             holder.textViewInfo.setBackgroundColor(colorPrimary);
             holder.textViewInfo.setText(builder);
         }else{
-            position -=funlist.size();
-            String name = actlist.get(position).getShow_name();
-            String fun = actlist.get(position).getFun();
-            final String cmd = actlist.get(position).getCmd();
+            ActionBase actionBase = actlist.get(position - funlist.size());
+            if(actionBase == null)
+                return;
+            String name = actionBase.getShow_name();
+            String fun = actionBase.getFun();
+            final String cmd = actionBase.getCmd();
             String info = String.format("方法:%s\n码值:%s",fun,cmd);
             for (int i  = 0; i < funlist.size();i ++){
                 if(funlist.get(i).functionBase.getName().equals(fun))
                 {
-                    holder.textViewMsg.setTextSize(actionShowSize);
                     holder.textViewName.setTextSize(actionShowSize);
                     holder.textViewInfo.setTextSize(actionShowSize);
 
                     holder.button.setVisibility(View.GONE);
                     holder.seekbar.setVisibility(View.GONE);
 
-                    switch ( actlist.get(position).getView_type()){
+                    switch ( actionBase.getView_type()){
                         case ShowTypeButton:{
                             holder.button.setVisibility(View.VISIBLE);
                             holder.button.setTextSize(actionShowSize);
                             holder.button.setText(name);
                             final int finalI = i;
-                            holder.button.setOnClickListener(v -> funlist.get(finalI).doFunction(cmd,holder.textViewMsg));
+                            holder.button.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    actionBase.doAction();
+                                    funlist.get(finalI).doFunction(cmd);
+                                }
+                            });
                             break;
                         }
                         case ShowTypeSeekBar:{
@@ -114,7 +121,7 @@ public class MyListViewAdapter extends RecyclerView.Adapter<MyListViewAdapter.Vi
     }
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView textViewInfo,textViewMsg,textViewName;
+        TextView textViewInfo,textViewName;
         Button button;
         SeekBar seekbar;
 
@@ -122,7 +129,6 @@ public class MyListViewAdapter extends RecyclerView.Adapter<MyListViewAdapter.Vi
             super(itemView);
             textViewName = itemView.findViewById(R.id.item_tv_name);
             textViewInfo = itemView.findViewById(R.id.item_tv_info);
-            textViewMsg = itemView.findViewById(R.id.item_tv_msg);
             button = itemView.findViewById(R.id.item_bt);
             seekbar = itemView.findViewById(R.id.seekBar);
         }

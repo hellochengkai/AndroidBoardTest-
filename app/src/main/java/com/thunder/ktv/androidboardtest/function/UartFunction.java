@@ -1,12 +1,7 @@
 package com.thunder.ktv.androidboardtest.function;
 
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.thunder.ktv.androidboardtest.AppHelper;
-import com.thunder.ktv.androidboardtest.view.MyListViewAdapter;
 import com.thunder.ktv.thunderjni.thunderapi.TDHardwareHelper;
 
 import java.util.ArrayList;
@@ -47,7 +42,8 @@ public class UartFunction extends IFunction{
 
     private int fd = 0;
     @Override
-    public boolean doFunction(Object o, View view) {
+    public boolean doFunction(Object o) {
+        String msg = new String();
         boolean ret = false;
         Log.d(TAG, "doFunction: " + this.toString() + " o == " + o);
         int[] writeData = UartAction.Str2code((String) o);
@@ -69,18 +65,19 @@ public class UartFunction extends IFunction{
         }
         int writelen = TDHardwareHelper.nativeWriteUart(fd, writeBytes,writeBytes.length);
         if(writelen != writeBytes.length){
-            AppHelper.showMsg(String.format("数据写入失败 writelen %d",writelen));
+            msg = String.format("数据写入失败 writelen %d",writelen);
+        }else{
+            msg = String.format("{Tx}:%s",Arrays.toString(writeBytes));
         }
+        AppHelper.showMsg(msg);
         byte[] byteread = new byte[10];
         int readlen = TDHardwareHelper.nativeReadUart(fd,byteread,byteread.length);
         if(readlen > 0){
-            String msg = new String("read data:");
+            msg = new String("{Rx}:");
             for (int i = 0;i < readlen;i++){
-                msg+= String.format("0x%x, ",byteread[i]);
+                msg+= String.format("0x%02x, ",byteread[i]);
             }
-//            AppHelper.showMsg(String.format(msg));
-            TextView textView = (TextView) view;
-            textView.setText(msg);
+            AppHelper.showMsg(msg);
         }
         TDHardwareHelper.nativeCloseUart(fd);
         ret = true;

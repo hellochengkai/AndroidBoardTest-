@@ -57,4 +57,8 @@ public class ActionBase implements Serializable {
     public void setCmd(String cmd) {
         this.cmd = cmd;
     }
+    public void doAction()
+    {
+
+    }
 }

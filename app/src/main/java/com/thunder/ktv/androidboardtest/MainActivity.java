@@ -6,6 +6,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -32,6 +34,15 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         AppHelper.setContext(getApplicationContext());
+        AppHelper.setUpdataMsg(new AppHelper.UpdataMsg() {
+            @Override
+            public void updataMsg(String msg) {
+                Log.d(TAG, "onCreate: updataMsg " + msg);
+                EditText editText = findViewById(R.id.msg);
+                editText.setText(msg);
+                editText.setSelection(editText.getText().length());
+            }
+        });
         Log.d(TAG, "onCreate: defaultInfoJson " + defaultInfoJson);
         try {
             LibsManager.loadNativeLibrarys();
@@ -53,4 +64,5 @@ public class MainActivity extends AppCompatActivity {
         // 设置adapter
         recyclerView.setAdapter(mAdapter);
     }
+
 }

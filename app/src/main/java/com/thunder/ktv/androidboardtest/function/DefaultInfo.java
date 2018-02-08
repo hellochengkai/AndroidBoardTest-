@@ -14,8 +14,6 @@ public class DefaultInfo {
 
     private static final int UART_NUM = 1;
 
-
-
     private static DefaultInfo instance;
     private FunctionInfo functionInfo = null;
 
