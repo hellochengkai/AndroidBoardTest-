@@ -8,12 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thunder.ktv.androidboardtest.function.DefaultInfo;
 import com.thunder.ktv.androidboardtest.uartfun.AbsFunction;
 import com.thunder.ktv.androidboardtest.uartfun.SeekFun;
 import com.thunder.ktv.androidboardtest.view.MyListViewAdapter;
@@ -29,15 +24,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ObjectMapper objectMapper = new ObjectMapper();
-        DefaultInfo defaultInfo = DefaultInfo.getInstence();
 
-        String defaultInfoJson = null;
-        try {
-            defaultInfoJson = objectMapper.writeValueAsString(defaultInfo.getFunctionInfo());
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
         AppHelper.setContext(getApplicationContext());
         AppHelper.setUpdataMsg(new AppHelper.UpdataMsg() {
             @Override
@@ -48,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
                 editText.setSelection(editText.getText().length());
             }
         });
-        Log.d(TAG, "onCreate: defaultInfoJson " + defaultInfoJson);
         try {
             LibsManager.loadNativeLibrarys();
         } catch (Exception e) {
@@ -63,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         Button button = new Button(getApplicationContext());
         button.setText("asasa");
         RecyclerView recyclerView = findViewById(R.id.list);
-        DefaultInfo defaultInfo = DefaultInfo.getInstence();
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 //        MyListViewAdapter mAdapter = new MyListViewAdapter(defaultInfo.getFunctionInfo());
         MyListViewAdapter mAdapter = new MyListViewAdapter(list);
@@ -82,8 +67,31 @@ public class MainActivity extends AppCompatActivity {
     }
     void initData(){
         list = new ArrayList<>();
-        byte[] bytes = {(byte) 0xb0, (byte) 0x03};
-        list.add(new SeekFun("MIC Master",bytes,(byte) 0,(byte) 0x7f));
+        byte[] bytes = new byte[2];
+
+        bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x03;
+        list.add(new SeekFun("MIC Master",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
+
+        bytes[0] = (byte) 0xb3;bytes[1] = (byte) 0x02;
+        list.add(new SeekFun("Key Control Pitch 音乐变调",bytes,(byte) 0x34,(byte) 0x4c, (byte) 0x40));
+        bytes[0] = (byte) 0xb3;bytes[1] = (byte) 0x03;
+        list.add(new SeekFun("Key Control Pitch Fine 音乐变调,微调",bytes,(byte) 0x0e,(byte) 0x72, (byte) 0x40));
+
+        bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x41;
+        list.add(new SeekFun("Speaker MUSIC Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
+        bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x07;
+        list.add(new SeekFun("Headphone MUSIC Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
+
+
+        bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x42;
+        list.add(new SeekFun("Speaker MIC Delay Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
+        bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x43;
+        list.add(new SeekFun("Speaker MIC Reverb Leve",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
+
+        bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x1d;
+        list.add(new SeekFun("Headphone MIC Delay Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
+        bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x1e;
+        list.add(new SeekFun("Headphone MIC Reverb Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
 
     }
 }
