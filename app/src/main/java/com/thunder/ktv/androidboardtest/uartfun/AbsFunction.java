@@ -9,24 +9,43 @@ abstract public class AbsFunction {
     protected static final String  UART_DEV = "/dev/ttyAMA0";
     protected static final int UART_RATE = 38400;
 
-    protected String showInfo;
 
     public String getShowInfo() {
-        return showInfo;
+        return new String();
     }
 
-    public void setShowInfo(String showInfo) {
-        this.showInfo = showInfo;
-    }
 
     protected String showName;
-    protected byte[] writeCode;
+    protected byte[] command;
+    public byte minCode = 0;
+    public byte maxCode = (byte) 0xff;
+    public byte defCode = 0;
+
     abstract public boolean doAction(Object o);
 
-    public AbsFunction(String showName) {
+    public AbsFunction(String showName, byte[] command, byte minCode, byte maxCode, byte defCode) {
         this.showName = showName;
+        this.minCode = minCode;
+        this.maxCode = maxCode;
+        this.defCode = defCode;
+        if(command != null){
+            this.command = new byte[command.length + 1];
+            System.arraycopy(command,0, this.command,0,command.length);
+            this.command[this.command.length - 1] = defCode;
+        }
     }
 
+    protected String byteCode2String(byte[] code,int len)
+    {
+        String codeStr = new String();
+        if(code == null || len == 0 || code.length < len){
+            return codeStr;
+        }
+        for (int i = 0; i < len; i++){
+            codeStr+= String.format("%02x ",code[i]);
+        }
+        return codeStr;
+    }
     protected String byteCode2String(byte[] code)
     {
         String codeStr = new String();
@@ -34,13 +53,13 @@ abstract public class AbsFunction {
             return codeStr;
         }
         for (int i = 0; i < code.length; i++){
-//            if(i == code.length - 1){
-//                codeStr+= String.format("0x%02x",code[i]);
-//            }else {
-//                codeStr+= String.format("0x%02x,",code[i]);
-//            }
             codeStr+= String.format("%02x ",code[i]);
         }
         return codeStr;
+    }
+
+    public String getShowName()
+    {
+        return showName;
     }
 }

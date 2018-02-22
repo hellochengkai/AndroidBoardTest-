@@ -34,7 +34,7 @@
         android:orientation="horizontal">
         <Button
             android:id="@+id/item_bt"
-            android:textSize="10pt"
+            android:textSize="30pt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />

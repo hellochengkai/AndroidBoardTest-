@@ -41,4 +41,9 @@ public class AppHelper{
     public static void setUpdataMsg(UpdataMsg updataMsg) {
         AppHelper.updataMsg = updataMsg;
     }
+    public static void clearMsg()
+    {
+        allmsg = new String();
+        msgConut = 0;
+    }
 }

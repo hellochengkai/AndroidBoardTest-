@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.thunder.ktv.androidboardtest.R;
 import com.thunder.ktv.androidboardtest.uartfun.AbsFunction;
+import com.thunder.ktv.androidboardtest.uartfun.ButtonFun;
+import com.thunder.ktv.androidboardtest.uartfun.RolandPrmFun;
 import com.thunder.ktv.androidboardtest.uartfun.SeekFun;
 
 import java.util.List;
@@ -22,14 +24,8 @@ import java.util.List;
  */
 
 public class MyListViewAdapter extends RecyclerView.Adapter<MyListViewAdapter.ViewHolder> {
-    public final static String ShowTypeButton = "button";
-    public final static String ShowTypeSeekBar = "seekbar";
-    public final static String ShowTypeText = "text";
     private static final String TAG = "MyListViewAdapter";
 
-    final int actionShowSize = 20;
-    final int funShowSize = 25;
-//    private FunctionInfo functionInfo;
     @Override
     public MyListViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // 实例化展示的view
@@ -42,6 +38,13 @@ public class MyListViewAdapter extends RecyclerView.Adapter<MyListViewAdapter.Vi
     public MyListViewAdapter(List<AbsFunction> list) {
         this.list = list;
     }
+
+    @Override
+    public int getItemViewType(int position) {
+
+        return super.getItemViewType(position);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(MyListViewAdapter.ViewHolder holder, int position) {
@@ -93,6 +96,20 @@ public class MyListViewAdapter extends RecyclerView.Adapter<MyListViewAdapter.Vi
                         progress = holder.seekbar.getMax();
                     }
                     holder.seekbar.setProgress(progress);
+                }
+            });
+            holder.textViewInfo.setText(absFunction.getShowInfo());
+        }else if(absFunction instanceof ButtonFun || absFunction instanceof RolandPrmFun){
+            holder.textViewName.setVisibility(View.GONE);
+            holder.seekbar.setVisibility(View.GONE);
+            holder.seekbar_down.setVisibility(View.GONE);
+            holder.seekbar_up.setVisibility(View.GONE);
+            holder.button.setText(absFunction.getShowName());
+            holder.button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    absFunction.doAction(null);
+                    holder.textViewInfo.setText(absFunction.getShowInfo());
                 }
             });
             holder.textViewInfo.setText(absFunction.getShowInfo());
