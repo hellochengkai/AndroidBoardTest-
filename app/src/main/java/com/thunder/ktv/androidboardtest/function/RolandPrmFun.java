@@ -1,9 +1,8 @@
-package com.thunder.ktv.androidboardtest.uartfun;
+package com.thunder.ktv.androidboardtest.function;
 
 import android.util.Log;
 
 import com.thunder.ktv.androidboardtest.AppHelper;
-import com.thunder.ktv.thunderjni.thunderapi.TDHardwareHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,24 +22,7 @@ public class RolandPrmFun extends AbsFunction {
     }
     byte [] head = new byte[16];
 
-    public boolean writeCode(byte[] code) {
-        if(code == null){
-            return false;
-        }
 
-        int fd = TDHardwareHelper.nativeOpenUart(UART_DEV.getBytes(),UART_RATE);
-        if(fd < 0){
-            AppHelper.showMsg(String.format("串口%s %d 打开失败",UART_DEV,UART_RATE));
-            return false;
-        }
-        int writeLen = TDHardwareHelper.nativeWriteUart(fd, code, code.length);
-        if(writeLen != code.length){
-            AppHelper.showMsg("串口寫入失敗！！" + byteCode2String(code));
-        }else{
-            AppHelper.showMsg("[Tx]:" + byteCode2String(code));
-        }
-        return false;
-    }
     private int writeCodeNum = 0;
     @Override
     public boolean doAction(Object o) {

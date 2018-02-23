@@ -1,4 +1,4 @@
-package com.thunder.ktv.androidboardtest.uartfun;
+package com.thunder.ktv.androidboardtest.function;
 import com.thunder.ktv.androidboardtest.AppHelper;
 import com.thunder.ktv.thunderjni.thunderapi.TDHardwareHelper;
 /**

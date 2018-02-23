@@ -12,11 +12,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.thunder.ktv.androidboardtest.function.GpioFun;
 import com.thunder.ktv.androidboardtest.player.THPlayer;
-import com.thunder.ktv.androidboardtest.uartfun.AbsFunction;
-import com.thunder.ktv.androidboardtest.uartfun.ButtonFun;
-import com.thunder.ktv.androidboardtest.uartfun.RolandPrmFun;
-import com.thunder.ktv.androidboardtest.uartfun.SeekFun;
+import com.thunder.ktv.androidboardtest.function.AbsFunction;
+import com.thunder.ktv.androidboardtest.function.ButtonFun;
+import com.thunder.ktv.androidboardtest.function.RolandPrmFun;
+import com.thunder.ktv.androidboardtest.function.SeekFun;
 import com.thunder.ktv.androidboardtest.view.MyListViewAdapter;
 import com.thunder.ktv.thunderjni.manager.LibsManager;
 
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     Button buttonClear;
     THPlayer thPlayer ;
     TextView textViewVol;
+    SystemControlClientHelper systemControlClientHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        systemControlClientHelper = SystemControlClientHelper.getInstance();
+        systemControlClientHelper.initServer(getApplicationContext());
         initData();
         initview();
     }
@@ -137,6 +141,11 @@ public class MainActivity extends AppCompatActivity {
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x1e;
         list.add(new SeekFun("耳机混响 Headphone MIC Reverb Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
 
+        list.add(new GpioFun("GPIO 2-3 up",2*8+3,1));
+        list.add(new GpioFun("GPIO 2-3 down",2*8+3,0));
+
+        list.add(new GpioFun("GPIO 2-4 up",2*8+4,1));
+        list.add(new GpioFun("GPIO 2-4 down",2*8+4,0));
         thPlayer = new THPlayer(null);
     }
 

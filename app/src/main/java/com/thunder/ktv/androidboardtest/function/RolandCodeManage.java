@@ -1,4 +1,4 @@
-package com.thunder.ktv.androidboardtest.uartfun;
+package com.thunder.ktv.androidboardtest.function;
 
 import android.util.Log;
 
@@ -12,9 +12,6 @@ import java.util.Map;
 public class RolandCodeManage {
     private static Map<Short,Byte> codeMap = new HashMap<>();
     private static final String TAG = "RolandCodeManage";
-    public Map<Short, Byte> getCodeMap() {
-        return codeMap;
-    }
     static public boolean addCode(short command,byte code)
     {
         Byte curCode = codeMap.get(command);

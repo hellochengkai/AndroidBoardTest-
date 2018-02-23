@@ -16,7 +16,7 @@
         <TextView
             android:id="@+id/item_tv_name"
             android:textColor="@color/colorPrimary"
-            android:textSize="50pt"
+            android:textSize="40pt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="item"/>
@@ -32,12 +32,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <Button
-            android:id="@+id/item_bt"
-            android:textSize="30pt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
         <Button
             android:id="@+id/item_bt_seekBar_down"
             android:text="-"

@@ -1,4 +1,7 @@
-package com.thunder.ktv.androidboardtest.uartfun;
+package com.thunder.ktv.androidboardtest.function;
+
+import com.thunder.ktv.androidboardtest.AppHelper;
+import com.thunder.ktv.thunderjni.thunderapi.TDHardwareHelper;
 
 /**
  * Created by chengkai on 18-2-13.
@@ -9,6 +12,24 @@ abstract public class AbsFunction {
     protected static final String  UART_DEV = "/dev/ttyAMA0";
     protected static final int UART_RATE = 38400;
 
+    public boolean writeCode(byte[] code) {
+        if(code == null){
+            return false;
+        }
+        int fd = TDHardwareHelper.nativeOpenUart(UART_DEV.getBytes(),UART_RATE);
+        if(fd < 0){
+            AppHelper.showMsg(String.format("串口%s %d 打开失败",UART_DEV,UART_RATE));
+            return false;
+        }
+        int writeLen = TDHardwareHelper.nativeWriteUart(fd, code, code.length);
+        if(writeLen != code.length){
+            AppHelper.showMsg("[Tx error]:" + byteCode2String(code));
+        }else{
+            AppHelper.showMsg("[Tx]:" + byteCode2String(code));
+        }
+        TDHardwareHelper.nativeCloseUart(fd);
+        return false;
+    }
 
     public String getShowInfo() {
         return new String();
