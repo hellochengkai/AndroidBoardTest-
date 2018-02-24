@@ -10,16 +10,17 @@ import com.thunder.ktv.thunderjni.thunderapi.TDHardwareHelper;
 
 public class GpioFun extends AbsFunction {
     private int gpio;
-    private int vol = 0;
-    public GpioFun(String showName,int gpio,int vol) {
+//    private int vol = 0;
+    public GpioFun(String showName,int gpio) {
         super(showName, null,(byte) 0,(byte) 0,(byte) 0);
         this.gpio = gpio;
-        this.vol = vol;
+//        this.vol = vol;
     }
     String msg = new String();
     @Override
     public boolean doAction(Object o) {
         int ret = 0;
+        int vol = (boolean) o?1:0;
         ret = TDHardwareHelper.nativeSetGPIO(gpio,vol);
         msg = String.format("设置%s : vol %d, ret %d",showName,vol,ret);
         AppHelper.showMsg(msg);

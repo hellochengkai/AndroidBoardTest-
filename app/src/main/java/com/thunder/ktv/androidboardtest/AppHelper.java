@@ -3,6 +3,8 @@ package com.thunder.ktv.androidboardtest;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.thunder.ktv.androidboardtest.player.THPlayer;
+
 import java.util.Observable;
 
 /**
@@ -45,5 +47,14 @@ public class AppHelper{
     {
         allmsg = new String();
         msgConut = 0;
+    }
+    static THPlayer thPlayer;
+
+    public static THPlayer getThPlayer() {
+        return thPlayer;
+    }
+
+    public static void setThPlayer(THPlayer thPlayer) {
+        AppHelper.thPlayer = thPlayer;
     }
 }

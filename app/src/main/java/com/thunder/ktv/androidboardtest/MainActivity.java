@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.thunder.ktv.androidboardtest.function.GpioFun;
+import com.thunder.ktv.androidboardtest.function.PlayerVolumeFun;
 import com.thunder.ktv.androidboardtest.player.THPlayer;
 import com.thunder.ktv.androidboardtest.function.AbsFunction;
 import com.thunder.ktv.androidboardtest.function.ButtonFun;
@@ -28,7 +29,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     Button buttonClear;
-    THPlayer thPlayer ;
+    THPlayer thPlayer;
     TextView textViewVol;
     SystemControlClientHelper systemControlClientHelper;
     @Override
@@ -99,11 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 thPlayer.stop();
             }
         });
-        textViewVol = findViewById(R.id.tv_vol);
-        textViewVol.setText("音量:" + volume);
         findViewById(R.id.bt_audio_select).setOnClickListener(onClickListener);
-        findViewById(R.id.bt_up_vol).setOnClickListener(onClickListener);
-        findViewById(R.id.bt_down_vol).setOnClickListener(onClickListener);
     }
     void initData(){
         list = new ArrayList<>();
@@ -115,16 +112,20 @@ public class MainActivity extends AppCompatActivity {
         bytes[0] = (byte) 0xbf;bytes[1] = (byte) 0x04;
         list.add(new ButtonFun("内部版本号 Build No Request",bytes,(byte) 0x00,(byte) 0x00, (byte) 0x00));
 
-        list.add(new GpioFun("GPIO 2-3 up",2*8+3,1));
-        list.add(new GpioFun("GPIO 2-3 down",2*8+3,0));
+        list.add(new GpioFun("GPIO 2-3",2*8+3));
+//        list.add(new GpioFun("GPIO 2-3 down",2*8+3,0));
 
-        list.add(new GpioFun("GPIO 2-4 up",2*8+4,1));
-        list.add(new GpioFun("GPIO 2-4 down",2*8+4,0));
+        list.add(new GpioFun("GPIO 2-4",2*8+4));
+//        list.add(new GpioFun("GPIO 2-4 down",2*8+4,0));
 
         list.add(new RolandPrmFun("效果1","/sdcard/roland/01.prm"));
         list.add(new RolandPrmFun("效果2","/sdcard/roland/02.prm"));
         list.add(new RolandPrmFun("效果3","/sdcard/roland/03.prm"));
         list.add(new RolandPrmFun("效果4","/sdcard/roland/04.prm"));
+
+        bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x03;
+        list.add(new PlayerVolumeFun("视频播放器音量"));
+
 
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x03;
         list.add(new SeekFun("麦克风主音量 MIC Master",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
@@ -148,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
         list.add(new SeekFun("耳机混响 Headphone MIC Reverb Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
 
         thPlayer = new THPlayer(null);
+        AppHelper.setThPlayer(thPlayer);
     }
 
     private int volume = 100;
@@ -158,24 +160,6 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.bt_audio_select:{
                     Button button = (Button) v;
                     button.setText("切换音轨 " +  thPlayer.audio_select());
-                    break;
-                }
-                case R.id.bt_up_vol:{
-                    volume+=2;
-                    if(volume > 100){
-                        volume = 100;
-                    }
-                    textViewVol.setText("音量:" + volume);
-                    thPlayer.setVolume(volume);
-                    break;
-                }
-                case R.id.bt_down_vol:{
-                    volume-=2;
-                    if(volume < 0){
-                        volume = 0;
-                    }
-                    textViewVol.setText("音量:" + volume);
-                    thPlayer.setVolume(volume);
                     break;
                 }
                 default:{
