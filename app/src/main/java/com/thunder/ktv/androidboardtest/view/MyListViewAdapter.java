@@ -21,6 +21,7 @@ import com.thunder.ktv.androidboardtest.function.PlayerVolumeFun;
 import com.thunder.ktv.androidboardtest.function.RolandPrmFun;
 import com.thunder.ktv.androidboardtest.function.SeekFun;
 
+import java.text.BreakIterator;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -83,82 +84,8 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if(list == null || list.size() < position){
             return;
         }
-        AbsFunction absFunction = list.get(position);
-        switch (getItemViewType(position)){
-            case ItemViewTypeSwitch:{
-                ViewHolderSwitch viewHolderSwitch = (ViewHolderSwitch) holder;
-                viewHolderSwitch.textViewName.setText(absFunction.getShowName());
-                viewHolderSwitch.aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        absFunction.doAction(isChecked);
-                        viewHolderSwitch.textViewInfo.setText(absFunction.getShowInfo());
-                    }
-                });
-
-                break;
-            }
-            case ItemViewTypeButton:{
-                ViewHolderButton viewHolderButton = (ViewHolderButton) holder;
-                viewHolderButton.button.setText(absFunction.getShowName());
-                viewHolderButton.button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        absFunction.doAction(null);
-                        viewHolderButton.textViewInfo.setText(absFunction.getShowInfo());
-                    }
-                });
-                viewHolderButton.textViewInfo.setText(absFunction.getShowInfo());
-                break;
-            }
-            case ItemViewTypeSeekBar:{
-                ViewHolderSeek viewHolderSeek = (ViewHolderSeek) holder;
-                viewHolderSeek.textViewName.setText(absFunction.getShowName());
-                viewHolderSeek.seekbar.setMax(absFunction.maxCode - absFunction.minCode);
-                viewHolderSeek.seekbar.setProgress((absFunction.defCode - absFunction.minCode));
-                viewHolderSeek.seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        Log.d(TAG, "onBindViewHolder: " + seekBar.getProgress());
-                        absFunction.doAction(seekBar.getProgress());
-                        viewHolderSeek.textViewInfo.setText(absFunction.getShowInfo());
-                    }
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-                    }
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-                    }
-                });
-                viewHolderSeek.seekbar_down.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int progress = viewHolderSeek.seekbar.getProgress() - 1;
-                        int min = 0;
-//                    int min = holder.seekbar.getMin();
-                        if(progress < min){
-                            progress = min;
-                        }
-                        viewHolderSeek.seekbar.setProgress(progress);
-                    }
-                });
-                viewHolderSeek.seekbar_up.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int progress = viewHolderSeek.seekbar.getProgress() + 1;
-                        if(progress > viewHolderSeek.seekbar.getMax()){
-                            progress = viewHolderSeek.seekbar.getMax();
-                        }
-                        viewHolderSeek.seekbar.setProgress(progress);
-                    }
-                });
-                viewHolderSeek.textViewInfo.setText(absFunction.getShowInfo());
-                break;
-            }
-            default:{
-                break;
-            }
-        }
+        MYViewHolder myViewHolder = (MYViewHolder) holder;
+        myViewHolder.OnBindViewHolder(list.get(position));
     }
     @Override
     public int getItemCount() {
@@ -167,7 +94,16 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
         return list.size();
     }
-    public static class ViewHolderSeek extends RecyclerView.ViewHolder {
+
+    public static abstract class MYViewHolder extends RecyclerView.ViewHolder{
+
+        public MYViewHolder(View itemView) {
+            super(itemView);
+        }
+        abstract public void OnBindViewHolder(AbsFunction absFunction);
+    }
+
+    public static class ViewHolderSeek extends MYViewHolder {
         TextView textViewInfo,textViewName;
         SeekBar seekbar;
         Button seekbar_up;
@@ -180,8 +116,56 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             seekbar_up = itemView.findViewById(R.id.item_bt_seekBar_up);
             seekbar_down = itemView.findViewById(R.id.item_bt_seekBar_down);
         }
+
+        @Override
+        public void OnBindViewHolder(AbsFunction absFunction) {
+            textViewName.setText(absFunction.getShowName());
+            seekbar.setMax(absFunction.maxCode - absFunction.minCode);
+            seekbar.setProgress((absFunction.defCode - absFunction.minCode));
+            seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    Log.d(TAG, "onBindViewHolder: " + seekBar.getProgress());
+                    absFunction.doAction(seekBar.getProgress());
+                    textViewInfo.setText(absFunction.getShowInfo());
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            });
+            seekbar_down.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int progress = seekbar.getProgress() - 1;
+                    int min = 0;
+//                    int min = holder.seekbar.getMin();
+                    if(progress < min){
+                        progress = min;
+                    }
+                    seekbar.setProgress(progress);
+                }
+            });
+            seekbar_up.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int progress = seekbar.getProgress() + 1;
+                    if(progress > seekbar.getMax()){
+                        progress = seekbar.getMax();
+                    }
+                    seekbar.setProgress(progress);
+                }
+            });
+            textViewInfo.setText(absFunction.getShowInfo());
+        }
     }
-    public static class ViewHolderButton extends RecyclerView.ViewHolder {
+    public static class ViewHolderButton extends MYViewHolder {
         TextView textViewInfo;
         Button button;
         public ViewHolderButton(View itemView) {
@@ -189,8 +173,22 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             textViewInfo = itemView.findViewById(R.id.item_tv_info);
             button = itemView.findViewById(R.id.item_bt);
         }
+
+        @Override
+        public void OnBindViewHolder(AbsFunction absFunction) {
+            button.setText(absFunction.getShowName());
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    absFunction.doAction(null);
+                    textViewInfo.setText(absFunction.getShowInfo());
+                }
+            });
+            textViewInfo.setText(absFunction.getShowInfo());
+        }
+
     }
-    public static class ViewHolderSwitch extends RecyclerView.ViewHolder {
+    public static class ViewHolderSwitch extends MYViewHolder {
         TextView textViewInfo,textViewName;
         Switch aSwitch;
         public ViewHolderSwitch(View itemView) {
@@ -198,6 +196,17 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             textViewName = itemView.findViewById(R.id.item_tv_name);
             textViewInfo = itemView.findViewById(R.id.item_tv_info);
             aSwitch = itemView.findViewById(R.id.item_sw);
+        }
+        public void OnBindViewHolder(AbsFunction absFunction)
+        {
+            textViewName.setText(absFunction.getShowName());
+            aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    absFunction.doAction(isChecked);
+                    textViewInfo.setText(absFunction.getShowInfo());
+                }
+            });
         }
     }
 }
