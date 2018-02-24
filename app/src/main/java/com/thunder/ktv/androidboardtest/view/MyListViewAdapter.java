@@ -22,7 +22,10 @@ import com.thunder.ktv.androidboardtest.function.RolandPrmFun;
 import com.thunder.ktv.androidboardtest.function.SeekFun;
 
 import java.text.BreakIterator;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -34,6 +37,7 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public static final int ItemViewTypeButton = 0;
     public static final int ItemViewTypeSeekBar = 1;
     public static final int ItemViewTypeSwitch = 2;
+    public static Map<Integer,Integer> seekMap ;
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder = null;
@@ -46,6 +50,7 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             case ItemViewTypeSeekBar:{
                 View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_rv_item_seek, parent, false);
                 viewHolder = new ViewHolderSeek(v);
+//                viewHolder.setIsRecyclable(false);
                 break;
             }
             case ItemViewTypeSwitch:{
@@ -62,6 +67,10 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     List<AbsFunction> list = null;
     public MyListViewAdapter(List<AbsFunction> list) {
         this.list = list;
+        seekMap = new HashMap<>();
+        for (int i = 0;i< list.size();i++){
+            seekMap.put(i,list.get(i).defCode - list.get(i).minCode);
+        }
     }
 
     @Override
@@ -75,8 +84,9 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if(list == null || list.size() < position){
             return;
         }
+        holder.setIsRecyclable(false);
         MYViewHolder myViewHolder = (MYViewHolder) holder;
-        myViewHolder.OnBindViewHolder(list.get(position));
+        myViewHolder.OnBindViewHolder(list.get(position),position);
     }
     @Override
     public int getItemCount() {
@@ -91,7 +101,7 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public MYViewHolder(View itemView) {
             super(itemView);
         }
-        abstract public void OnBindViewHolder(AbsFunction absFunction);
+        abstract public void OnBindViewHolder(AbsFunction absFunction,int position);
     }
 
     private static class ViewHolderSeek extends MYViewHolder {
@@ -109,16 +119,24 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         @Override
-        public void OnBindViewHolder(AbsFunction absFunction) {
+        public void OnBindViewHolder(AbsFunction absFunction,int position) {
+            int seekVol  = MyListViewAdapter.seekMap.get(position);
             textViewName.setText(absFunction.getShowName());
             seekbar.setMax(absFunction.maxCode - absFunction.minCode);
-            seekbar.setProgress((absFunction.defCode - absFunction.minCode));
+            seekbar.setProgress(seekVol);
+
             seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    Log.d(TAG, "onBindViewHolder: " + seekBar.getProgress());
-                    absFunction.doAction(seekBar.getProgress());
-                    textViewInfo.setText(absFunction.getShowInfo());
+                        MyListViewAdapter.seekMap.remove(position);
+                        MyListViewAdapter.seekMap.put(position,seekBar.getProgress());
+                        int seekVol  = MyListViewAdapter.seekMap.get(position);
+
+                        Log.d(TAG, fromUser + "  onBindViewHolder: " + absFunction.getShowName() +"   "+ seekVol);
+
+                        absFunction.doAction(seekVol);
+
+                        textViewInfo.setText(absFunction.getShowInfo());
                 }
 
                 @Override
@@ -166,7 +184,7 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         @Override
-        public void OnBindViewHolder(AbsFunction absFunction) {
+        public void OnBindViewHolder(AbsFunction absFunction,int position) {
             button.setText(absFunction.getShowName());
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -188,7 +206,7 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             textViewInfo = itemView.findViewById(R.id.item_tv_info);
             aSwitch = itemView.findViewById(R.id.item_sw);
         }
-        public void OnBindViewHolder(AbsFunction absFunction)
+        public void OnBindViewHolder(AbsFunction absFunction,int position)
         {
             textViewName.setText(absFunction.getShowName());
             aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

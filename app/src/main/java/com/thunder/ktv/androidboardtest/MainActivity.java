@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     Button buttonClear;
     THPlayer thPlayer;
-    TextView textViewVol;
     SystemControlClientHelper systemControlClientHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        systemControlClientHelper = SystemControlClientHelper.getInstance();
-        systemControlClientHelper.initServer(getApplicationContext());
+//        systemControlClientHelper = SystemControlClientHelper.getInstance();
+//        systemControlClientHelper.initServer(getApplicationContext());
         initData();
         initview();
     }
