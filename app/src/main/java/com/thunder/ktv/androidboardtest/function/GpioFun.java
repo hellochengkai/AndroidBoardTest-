@@ -2,6 +2,7 @@ package com.thunder.ktv.androidboardtest.function;
 
 import com.thunder.ktv.androidboardtest.AppHelper;
 import com.thunder.ktv.androidboardtest.SystemControlClientHelper;
+import com.thunder.ktv.androidboardtest.view.MyListViewAdapter;
 import com.thunder.ktv.thunderjni.thunderapi.TDHardwareHelper;
 
 /**
@@ -12,7 +13,7 @@ public class GpioFun extends AbsFunction {
     private int gpio;
 //    private int vol = 0;
     public GpioFun(String showName,int gpio) {
-        super(showName, null,(byte) 0,(byte) 0,(byte) 0);
+        super(MyListViewAdapter.ItemViewTypeSwitch,showName, null,(byte) 0,(byte) 0,(byte) 0);
         this.gpio = gpio;
 //        this.vol = vol;
     }

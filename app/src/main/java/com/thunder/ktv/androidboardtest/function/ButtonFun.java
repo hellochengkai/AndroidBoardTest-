@@ -1,5 +1,6 @@
 package com.thunder.ktv.androidboardtest.function;
 import com.thunder.ktv.androidboardtest.AppHelper;
+import com.thunder.ktv.androidboardtest.view.MyListViewAdapter;
 import com.thunder.ktv.thunderjni.thunderapi.TDHardwareHelper;
 /**
  * Created by chengkai on 18-2-22.
@@ -8,7 +9,7 @@ public class ButtonFun extends AbsFunction{
     private static final String TAG = "ButtonFun";
 
     public ButtonFun(String showName, byte[] command, byte minCode, byte maxCode, byte defCode) {
-        super(showName, command, minCode, maxCode, defCode);
+        super(MyListViewAdapter.ItemViewTypeButton,showName, command, minCode, maxCode, defCode);
     }
     byte[] byteread = new byte[10];
     int readlen = 0;

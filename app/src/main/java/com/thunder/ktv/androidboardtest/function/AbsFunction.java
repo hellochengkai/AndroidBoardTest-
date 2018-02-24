@@ -12,6 +12,7 @@ abstract public class AbsFunction {
     protected static final String  UART_DEV = "/dev/ttyAMA0";
     protected static final int UART_RATE = 38400;
 
+    public int showType = 0;
     public boolean writeCode(byte[] code) {
         if(code == null){
             return false;
@@ -44,7 +45,8 @@ abstract public class AbsFunction {
 
     abstract public boolean doAction(Object o);
 
-    public AbsFunction(String showName, byte[] command, byte minCode, byte maxCode, byte defCode) {
+    public AbsFunction(int showType,String showName, byte[] command, byte minCode, byte maxCode, byte defCode) {
+        this.showType = showType;
         this.showName = showName;
         this.minCode = minCode;
         this.maxCode = maxCode;

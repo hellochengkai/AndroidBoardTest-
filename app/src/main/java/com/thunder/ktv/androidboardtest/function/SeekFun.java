@@ -1,5 +1,7 @@
 package com.thunder.ktv.androidboardtest.function;
 
+import com.thunder.ktv.androidboardtest.view.MyListViewAdapter;
+
 /**
  * Created by chengkai on 18-2-13.
  */
@@ -8,7 +10,7 @@ public class SeekFun extends AbsFunction {
     private int curPercent = 0;
 
     public SeekFun(String showName, byte[] command,byte minCode,byte maxCode,byte defCode) {
-        super(showName,command,minCode,maxCode,defCode);
+        super(MyListViewAdapter.ItemViewTypeSeekBar,showName,command,minCode,maxCode,defCode);
         curPercent = (defCode - minCode) * 100/(maxCode - minCode);
     }
     public String getShowInfo()

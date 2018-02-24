@@ -1,6 +1,7 @@
 package com.thunder.ktv.androidboardtest.function;
 
 import com.thunder.ktv.androidboardtest.AppHelper;
+import com.thunder.ktv.androidboardtest.view.MyListViewAdapter;
 
 /**
  * Created by chengkai on 18-2-24.
@@ -8,7 +9,7 @@ import com.thunder.ktv.androidboardtest.AppHelper;
 
 public class PlayerVolumeFun extends AbsFunction{
     public PlayerVolumeFun(String showName) {
-        super(showName, null,(byte) 0,(byte) 100,(byte) 100);
+        super(MyListViewAdapter.ItemViewTypeSeekBar,showName, null,(byte) 0,(byte) 100,(byte) 100);
     }
     int vol = 0;
     @Override

@@ -31,9 +31,9 @@ import java.util.logging.Logger;
 
 public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = "MyListViewAdapter";
-    private final int ItemViewTypeSeekBar = 0;
-    private final int ItemViewTypeButton = 1;
-    private final int ItemViewTypeSwitch = 2;
+    public static final int ItemViewTypeButton = 0;
+    public static final int ItemViewTypeSeekBar = 1;
+    public static final int ItemViewTypeSwitch = 2;
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder = null;
@@ -66,16 +66,7 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemViewType(int position) {
-        if(list.get(position) instanceof SeekFun ||
-                list.get(position) instanceof PlayerVolumeFun){
-            return ItemViewTypeSeekBar;
-        }else if(list.get(position) instanceof RolandPrmFun ||
-                list.get(position) instanceof ButtonFun){
-            return ItemViewTypeButton;
-        }else if(list.get(position) instanceof GpioFun){
-            return ItemViewTypeSwitch;
-        }
-        return ItemViewTypeButton;
+        return list.get(position).showType;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -95,7 +86,7 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return list.size();
     }
 
-    public static abstract class MYViewHolder extends RecyclerView.ViewHolder{
+    private static abstract class MYViewHolder extends RecyclerView.ViewHolder{
 
         public MYViewHolder(View itemView) {
             super(itemView);
@@ -103,7 +94,7 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         abstract public void OnBindViewHolder(AbsFunction absFunction);
     }
 
-    public static class ViewHolderSeek extends MYViewHolder {
+    private static class ViewHolderSeek extends MYViewHolder {
         TextView textViewInfo,textViewName;
         SeekBar seekbar;
         Button seekbar_up;
@@ -165,7 +156,7 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             textViewInfo.setText(absFunction.getShowInfo());
         }
     }
-    public static class ViewHolderButton extends MYViewHolder {
+    private static class ViewHolderButton extends MYViewHolder {
         TextView textViewInfo;
         Button button;
         public ViewHolderButton(View itemView) {
@@ -188,7 +179,7 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
     }
-    public static class ViewHolderSwitch extends MYViewHolder {
+    private static class ViewHolderSwitch extends MYViewHolder {
         TextView textViewInfo,textViewName;
         Switch aSwitch;
         public ViewHolderSwitch(View itemView) {

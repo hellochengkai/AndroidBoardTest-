@@ -3,6 +3,7 @@ package com.thunder.ktv.androidboardtest.function;
 import android.util.Log;
 
 import com.thunder.ktv.androidboardtest.AppHelper;
+import com.thunder.ktv.androidboardtest.view.MyListViewAdapter;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,7 +18,7 @@ public class RolandPrmFun extends AbsFunction {
     private static final String TAG = "RolandPrmFun";
     private String path = null;
     public RolandPrmFun(String showName,String path) {
-        super(showName, null,(byte) 0,(byte) 0,(byte) 0);
+        super(MyListViewAdapter.ItemViewTypeButton,showName, null,(byte) 0,(byte) 0,(byte) 0);
         this.path = path;
     }
     byte [] head = new byte[16];
