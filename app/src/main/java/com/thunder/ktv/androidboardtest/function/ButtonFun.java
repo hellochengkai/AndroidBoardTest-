@@ -31,6 +31,8 @@ public class ButtonFun extends AbsFunction{
         readlen = TDHardwareHelper.nativeReadUart(fd,byteread,byteread.length);
         if(readlen > 0){
             AppHelper.showMsg("{Rx}:" + byteCode2String(byteread,readlen));
+        }else{
+            AppHelper.showMsg("{Rx}:读取失败");
         }
         TDHardwareHelper.nativeCloseUart(fd);
         ret = true;
@@ -39,7 +41,13 @@ public class ButtonFun extends AbsFunction{
 
     @Override
     public String getShowInfo() {
-        return String.format("Command:%02x %02x %02x, Rx:%s",
-                command[0], command[1], command[2],byteCode2String(byteread,readlen));
+        if(readlen > 0){
+            return String.format("Command:%02x %02x %02x, Rx:%s",
+                    command[0], command[1], command[2],byteCode2String(byteread,readlen));
+        }else{
+            return String.format("Command:%02x %02x %02x",
+                    command[0], command[1], command[2]);
+        }
+
     }
 }

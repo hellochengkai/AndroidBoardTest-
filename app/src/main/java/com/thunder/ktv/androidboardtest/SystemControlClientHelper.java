@@ -101,7 +101,7 @@ public class SystemControlClientHelper {
                 isFirstConnected = false;
             }
 
-//            execShellCmd("mkdir /sdcard/xxtest");
+            execShellCmd("mkdir /sdcard/xx1test");
 //            execShellCmd(AppConstant.CMD_KILL_SP_TS_DAEMON);
         }
 
@@ -348,35 +348,37 @@ public class SystemControlClientHelper {
     }
 
 
-    public void gpioDirSet(long gpio_no, long dir) {
+    public int gpioDirSet(long gpio_no, long dir) {
+        int ret = -1;
         Log.d(TAG,"gpioDirSet begin: gpio_no :" + gpio_no + "dir:" + dir);
         try {
             if (systemControlManager != null) {
-                systemControlManager.gpioDirSet(gpio_no,dir);
+                ret = systemControlManager.gpioDirSet(gpio_no,dir);
                 Log.d(TAG,"gpioDirSet end gpio_no:" + gpio_no + " dir:" + dir);
-                return;
+                return ret;
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return;
+            return ret;
         }
         Log.d(TAG,"gpioDirSet end");
-        return;
+        return ret;
     }
-    public void gpioBitSet(long gpio_no, long bit) {
+    public int gpioBitSet(long gpio_no, long bit) {
+        int ret = -1;
         Log.d(TAG,"gpioBitSet begin: gpio_no :" + gpio_no + "bit:" + bit);
         try {
             if (systemControlManager != null) {
-                systemControlManager.gpioBitSet(gpio_no,bit);
+                ret = systemControlManager.gpioBitSet(gpio_no,bit);
                 Log.d(TAG,"gpioBitSet end gpio_no:" + gpio_no + " bit:" + bit);
-                return;
+                return ret;
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return;
+            return ret;
         }
         Log.d(TAG,"gpioBitSet end");
-        return;
+        return ret;
     }
 
     public int gpioBitGet(long gpio_no) {
@@ -393,6 +395,22 @@ public class SystemControlClientHelper {
             return ret;
         }
         Log.d(TAG,"gpioBitGet end");
+        return ret;
+    }
+    public int regRead(long reg_addr) {
+        int ret = -1;
+        Log.d(TAG,"regRead begin: reg_addr :" + reg_addr);
+        try {
+            if (systemControlManager != null) {
+                ret = systemControlManager.regRead(reg_addr);
+                Log.d(TAG,"regRead end reg_addr:" + reg_addr + "ret " + ret);
+                return ret;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ret;
+        }
+        Log.d(TAG,"regRead end");
         return ret;
     }
 

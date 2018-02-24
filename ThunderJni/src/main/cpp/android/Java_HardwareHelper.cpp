@@ -11,12 +11,11 @@
 #include <cstring>
 #include "tools/JniHelper.h"
 #include "jni_log.h"
-
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#include "adaptor.h"
 
 int open_port(char * dev) //////////////打开串口
 {
@@ -159,6 +158,45 @@ JNIEXPORT jint JNICALL Java_com_thunder_ktv_thunderjni_thunderapi_TDHardwareHelp
     env->ReleaseByteArrayElements(data, (jbyte *) cbuf, 0);
     return ret;
 }
+
+void Debug(char *file, char *function, int line, char * message)
+{
+    int size = strlen(message) + 1024;
+    char *msg = (char*)malloc(size);
+    memset(msg, 0, size);
+    char *tmpFile = strrchr(file, '/');
+    if(tmpFile == NULL) {
+        tmpFile = strrchr(file, '\\');
+    }
+    if(tmpFile) {
+        file = tmpFile + 1;
+    }
+    sprintf(msg,"<file:%s--%s> %s <line:%d> <thread:%u>", file, function, message, line, gettid());
+    char *pos = strrchr(msg,'\n');
+    if(pos)
+    {
+        do{
+            if(*(pos-1) == '\r')
+            {
+                *pos = *(pos-1) = ' ';
+            }
+            else
+            {
+                *pos = ' ';
+            }
+            pos = strrchr(msg,'\n');
+        }while(pos);
+    }
+    LOGI("%s",msg);
+    free(msg);
+}
+
+JNIEXPORT jint JNICALL Java_com_thunder_ktv_thunderjni_thunderapi_TDHardwareHelper_nativeSetGPIO(JNIEnv *env, jclass jclazz,jint gpio,int vol)
+{
+    Mid_RegsiterDEBUGCallbackFunction(Debug);
+    return Mid_SetGPIO(gpio,vol);
+}
+
 #ifdef __cplusplus
 }
 #endif

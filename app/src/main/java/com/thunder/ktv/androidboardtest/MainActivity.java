@@ -115,6 +115,12 @@ public class MainActivity extends AppCompatActivity {
         bytes[0] = (byte) 0xbf;bytes[1] = (byte) 0x04;
         list.add(new ButtonFun("内部版本号 Build No Request",bytes,(byte) 0x00,(byte) 0x00, (byte) 0x00));
 
+        list.add(new GpioFun("GPIO 2-3 up",2*8+3,1));
+        list.add(new GpioFun("GPIO 2-3 down",2*8+3,0));
+
+        list.add(new GpioFun("GPIO 2-4 up",2*8+4,1));
+        list.add(new GpioFun("GPIO 2-4 down",2*8+4,0));
+
         list.add(new RolandPrmFun("效果1","/sdcard/roland/01.prm"));
         list.add(new RolandPrmFun("效果2","/sdcard/roland/02.prm"));
         list.add(new RolandPrmFun("效果3","/sdcard/roland/03.prm"));
@@ -141,11 +147,6 @@ public class MainActivity extends AppCompatActivity {
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x1e;
         list.add(new SeekFun("耳机混响 Headphone MIC Reverb Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
 
-        list.add(new GpioFun("GPIO 2-3 up",2*8+3,1));
-        list.add(new GpioFun("GPIO 2-3 down",2*8+3,0));
-
-        list.add(new GpioFun("GPIO 2-4 up",2*8+4,1));
-        list.add(new GpioFun("GPIO 2-4 down",2*8+4,0));
         thPlayer = new THPlayer(null);
     }
 

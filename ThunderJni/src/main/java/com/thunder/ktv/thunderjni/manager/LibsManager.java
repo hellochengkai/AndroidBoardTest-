@@ -11,9 +11,18 @@ import android.util.Log;
 public class LibsManager {
     private static boolean      isLoaded = false;
 
-    public static final String[] LIBS = new String[] {
-            "thunderjni"
+    public static final String[] LIBS7000 = new String[] {
+            "7432es",
+            "adaptor_7000",
+            "thunderjni_v4"
     };
+
+    public static final String[] LIBS8000 = new String[] {
+            "th8000",
+            "adaptor_8000",
+            "thunderjni_v7"
+    };
+
 
     public static void loadNativeLibrarys() throws Exception {
         if(!loadLibs()) {
@@ -21,6 +30,16 @@ public class LibsManager {
         }
     }
 
+    public static String[] getCurrentLibrarysInfo() {
+
+        switch (Build.VERSION.SDK_INT) {
+            case Build.VERSION_CODES.KITKAT://7000
+                return LIBS7000;
+            case Build.VERSION_CODES.N://8000
+            default:
+                return LIBS8000;
+        }
+    }
 
 
     /**
@@ -31,7 +50,7 @@ public class LibsManager {
         if(isLoaded) {
             return true;
         }
-        String[] libs = LIBS;
+        String[] libs = getCurrentLibrarysInfo();
         boolean err = false;
         for(int i=0;i<libs.length;i++) {
             try {
