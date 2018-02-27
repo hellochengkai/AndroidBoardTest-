@@ -32,54 +32,6 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public static final int ItemViewTypeSeekBar = 1;
     public static final int ItemViewTypeSwitch = 2;
 
-    private void updataView()
-    {
-//        this.notifyDataSetChanged();
-    }
-
-    public class BaseCode{
-        public final static int TYPE_UNKNOW = -1;
-        public final static int TYPE_DELAY = 0;
-        public final static int TYPE_ECHO = 1;
-        public final static int TYPE_MIC = 2;
-        public final static int TYPE_MUSIC = 3;
-        String name;
-        int type;
-        int curCode;
-        int minCode;
-        int maxCode;
-
-        public int getType() {
-            return type;
-        }
-
-        public void up()
-        {
-            curCode++;
-            if(curCode > maxCode){
-                curCode = maxCode;
-            }
-            updataView();
-        }
-        public void down()
-        {
-            curCode--;
-            if(curCode < minCode){
-                curCode = minCode;
-            }
-            updataView();
-        }
-
-        public BaseCode(String name, int type, int curCode, int minCode, int maxCode) {
-            this.name = name;
-            this.type = type;
-            this.curCode = curCode;
-            this.minCode = minCode;
-            this.maxCode = maxCode;
-        }
-    }
-
-    public static Map<Integer,BaseCode> seekMap ;
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder = null;
@@ -92,7 +44,6 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             case ItemViewTypeSeekBar:{
                 View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_rv_item_seek, parent, false);
                 viewHolder = new ViewHolderSeek(v);
-//                viewHolder.setIsRecyclable(false);
                 break;
             }
             case ItemViewTypeSwitch:{
@@ -106,25 +57,18 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
         return viewHolder;
     }
-    List<AbsFunction> list = null;
+    public static List<AbsFunction> list = null;
     public MyListViewAdapter(List<AbsFunction> list) {
         this.list = list;
-        seekMap = new HashMap<>();
-        for (int i = 0;i< list.size();i++){
-            if(list.get(i).showType == ItemViewTypeSeekBar){
-                int CodeType = BaseCode.TYPE_UNKNOW;
-                if(list.get(i) instanceof SeekFun){
-                    SeekFun seekFun = (SeekFun) list.get(i);
-                    CodeType = seekFun.getCodeType();
-                }
-                seekMap.put(i,new BaseCode(
-                        list.get(i).getShowName(),
-                        CodeType,
-                        list.get(i).defCode - list.get(i).minCode,
-                        list.get(i).minCode,
-                        list.get(i).maxCode));
-            }
-        }
+//        seekMap = new HashMap<>();
+//        for (int i = 0;i< list.size();i++){
+//            if(list.get(i).showType == ItemViewTypeSeekBar){
+//                if(list.get(i) instanceof SeekFun){
+//                    SeekFun seekFun = (SeekFun) list.get(i);
+//                    seekMap.put(i,seekFun);
+//                }
+//            }
+//        }
     }
 
     @Override
@@ -174,34 +118,23 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         @Override
         public void OnBindViewHolder(AbsFunction absFunction,int position) {
-            int seekVol  = 0;
-            BaseCode baseCode = MyListViewAdapter.seekMap.get(position);
-            if(baseCode != null){
-                seekVol = baseCode.curCode;
-            }
             textViewName.setText(absFunction.getShowName());
-            seekbar.setMax(absFunction.maxCode - absFunction.minCode);
-            seekbar.setProgress(seekVol);
+
+            if(!( absFunction instanceof SeekFun)){
+                return;
+            }
+            SeekFun seekFun = (SeekFun) absFunction;
+            seekbar.setMax(seekFun.max);
+            seekbar.setProgress(seekFun.cur);
 
             seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        MyListViewAdapter.seekMap.get(position).curCode = seekBar.getProgress();
-                        BaseCode baseCode = MyListViewAdapter.seekMap.get(position);
-                        if(baseCode == null){
-                            Log.d(TAG, "baseCode == null position is " + position);
-                            return;
-                        }
-                        baseCode.curCode = seekBar.getProgress();
-//                        MyListViewAdapter.seekMap.put(position,seekBar.getProgress());
-                        int seekVol = baseCode.curCode;
-                        Log.d(TAG, fromUser + "  onBindViewHolder: " + absFunction.getShowName() +"   "+ seekVol);
-
-                        absFunction.doAction(seekVol);
-
+                        seekFun.cur = seekBar.getProgress();
+                        Log.d(TAG, fromUser + "  onBindViewHolder: " + absFunction.getShowName() +"   "+ seekFun.cur);
+                        absFunction.doAction(seekFun.cur);
                         textViewInfo.setText(absFunction.getShowInfo());
                 }
-
                 @Override
                 public void onStartTrackingTouch(SeekBar seekBar) {
 
@@ -217,7 +150,6 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 public void onClick(View v) {
                     int progress = seekbar.getProgress() - 1;
                     int min = 0;
-//                    int min = holder.seekbar.getMin();
                     if(progress < min){
                         progress = min;
                     }

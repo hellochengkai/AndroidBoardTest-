@@ -7,20 +7,19 @@ import com.thunder.ktv.androidboardtest.view.MyListViewAdapter;
  * Created by chengkai on 18-2-24.
  */
 
-public class PlayerVolumeFun extends AbsFunction{
+public class PlayerVolumeFun extends SeekFun{
     public PlayerVolumeFun(String showName) {
-        super(MyListViewAdapter.ItemViewTypeSeekBar,showName, null,(byte) 0,(byte) 100,(byte) 100);
+        super(showName, null,(byte) 100,(byte) 100);
     }
-    int vol = 0;
     @Override
     public boolean doAction(Object o) {
-        vol = (int) o;
-        AppHelper.getThPlayer().setVolume(vol);
+        cur = (int) o;
+        AppHelper.getThPlayer().setVolume(cur);
         return false;
     }
     public String getShowInfo()
     {
         return String.format("设置音量 %d",
-                vol);
+                cur);
     }
 }

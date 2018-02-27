@@ -1,6 +1,7 @@
 package com.thunder.ktv.androidboardtest.function;
 
 import android.util.Log;
+import android.widget.EditText;
 
 import com.thunder.ktv.androidboardtest.AppHelper;
 import com.thunder.ktv.androidboardtest.view.MyListViewAdapter;
@@ -17,6 +18,7 @@ import java.util.Set;
  */
 
 public class FrontPanelFun extends AbsFunction {
+    private static final String TAG = "FrontPanelFun";
     private static final byte [] powerCode =    {(byte) 0xEF, (byte) 0xc8, (byte) 0x00, (byte) 0xfe};
 //    private static final byte [] Code3Up =      {(byte) 0xEF, (byte) 0xc3, (byte) 0x02, (byte) 0xfe};
 //    private static final byte [] Code3Down =    {(byte) 0xEF, (byte) 0xc3, (byte) 0x03, (byte) 0xfe};
@@ -59,17 +61,20 @@ public class FrontPanelFun extends AbsFunction {
         }
         void doAction(byte [] code)
         {
-            Set keySet = MyListViewAdapter.seekMap.keySet();
-            Iterator iterator = keySet.iterator();
+            Iterator iterator = MyListViewAdapter.list.iterator();
+
             while (iterator.hasNext()){
-                MyListViewAdapter.BaseCode baseCode = MyListViewAdapter.seekMap.get(iterator.next());
-                if(type == baseCode.getType()){
+                AbsFunction absFunction = (AbsFunction) iterator.next();
+                if((absFunction instanceof EditorFun) == false)
+                    continue;
+                EditorFun editorFun = (EditorFun) absFunction;
+                if(type == editorFun.codeType){
+                    Log.d(TAG, "editorFun: " + editorFun.showName + type + " " + editorFun.codeType);
                     if(isUpCode(code)){
-                        baseCode.up();
+                        editorFun.up();
                     }else if(isDownCode(code)){
-                        baseCode.down();
+                        editorFun.down();
                     }
-                    AppHelper.getMainActivity().upDataView();
                 }
             }
             return;
@@ -80,15 +85,15 @@ public class FrontPanelFun extends AbsFunction {
     void initCode()
     {
         frontPanelCodes = new ArrayList<>();
-        frontPanelCodes.add(new FrontPanelCode(MyListViewAdapter.BaseCode.TYPE_ECHO,"echo", (byte) 0xc4));
-        frontPanelCodes.add(new FrontPanelCode(MyListViewAdapter.BaseCode.TYPE_DELAY,"delay", (byte) 0xc3));
-        frontPanelCodes.add(new FrontPanelCode(MyListViewAdapter.BaseCode.TYPE_MUSIC,"music", (byte) 0xc0));
-        frontPanelCodes.add(new FrontPanelCode(MyListViewAdapter.BaseCode.TYPE_MIC,"mic",(byte) 0xc1));
+        frontPanelCodes.add(new FrontPanelCode(EditorFun.TYPE_ECHO,"echo", (byte) 0xc4));
+        frontPanelCodes.add(new FrontPanelCode(EditorFun.TYPE_DELAY,"delay", (byte) 0xc3));
+        frontPanelCodes.add(new FrontPanelCode(EditorFun.TYPE_MUSIC,"music", (byte) 0xc0));
+        frontPanelCodes.add(new FrontPanelCode(EditorFun.TYPE_MIC,"mic",(byte) 0xc1));
     }
     ReadCodeRunnable readCodeRunnable = null;
-    private static final String TAG = "TestFun";
+
     public FrontPanelFun(String showName) {
-        super(MyListViewAdapter.ItemViewTypeSwitch,showName, null,(byte) 0,(byte) 0,(byte) 0);
+        super(MyListViewAdapter.ItemViewTypeSwitch,showName, null);
         initCode();
         readCodeRunnable = new ReadCodeRunnable();
         new Thread(readCodeRunnable).start();

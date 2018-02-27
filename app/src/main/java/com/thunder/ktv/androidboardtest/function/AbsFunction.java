@@ -39,22 +39,15 @@ abstract public class AbsFunction {
 
     protected String showName;
     protected byte[] command;
-    public byte minCode = 0;
-    public byte maxCode = (byte) 0xff;
-    public byte defCode = 0;
 
     abstract public boolean doAction(Object o);
 
-    public AbsFunction(int showType,String showName, byte[] command, byte minCode, byte maxCode, byte defCode) {
+    public AbsFunction(int showType,String showName, byte[] command) {
         this.showType = showType;
         this.showName = showName;
-        this.minCode = minCode;
-        this.maxCode = maxCode;
-        this.defCode = defCode;
         if(command != null){
             this.command = new byte[command.length + 1];
             System.arraycopy(command,0, this.command,0,command.length);
-            this.command[this.command.length - 1] = defCode;
         }
     }
 

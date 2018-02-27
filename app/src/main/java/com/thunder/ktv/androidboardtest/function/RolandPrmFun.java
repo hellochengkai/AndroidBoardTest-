@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.thunder.ktv.androidboardtest.AppHelper;
 import com.thunder.ktv.androidboardtest.view.MyListViewAdapter;
+import com.thunder.ktv.thunderjni.thunderapi.TDHardwareHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,7 +19,7 @@ public class RolandPrmFun extends AbsFunction {
     private static final String TAG = "RolandPrmFun";
     private String path = null;
     public RolandPrmFun(String showName,String path) {
-        super(MyListViewAdapter.ItemViewTypeButton,showName, null,(byte) 0,(byte) 0,(byte) 0);
+        super(MyListViewAdapter.ItemViewTypeButton,showName, null);
         this.path = path;
     }
     byte [] head = new byte[16];
@@ -44,6 +45,11 @@ public class RolandPrmFun extends AbsFunction {
             if(!new String(head).startsWith("Roland")){
                 AppHelper.showMsg("获取头信息失败!!!");
             }
+            int fd = TDHardwareHelper.nativeOpenUart(UART_DEV.getBytes(),UART_RATE);
+            if(fd < 0){
+                AppHelper.showMsg(String.format("串口%s %d 打开失败",UART_DEV,UART_RATE));
+                return false;
+            }
             Log.d(TAG, "doAction: head " + new String(head));
             while (true){
                 byte[] code = new byte[3];
@@ -59,10 +65,16 @@ public class RolandPrmFun extends AbsFunction {
                 if(RolandCodeManage.addCode(key,code[2]))
                 {
                     writeCodeNum++;
-                    writeCode(code);
+                    int writeLen = TDHardwareHelper.nativeWriteUart(fd, code, code.length);
+                    if(writeLen != code.length){
+                        AppHelper.showMsg("[Tx error]:" + byteCode2String(code));
+                    }else{
+                        AppHelper.showMsg("[Tx]:" + byteCode2String(code));
+                    }
                 }
             }
             AppHelper.showMsg("写入完毕("+writeCodeNum+")!!!");
+            TDHardwareHelper.nativeCloseUart(fd);
             fileInputStream.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();

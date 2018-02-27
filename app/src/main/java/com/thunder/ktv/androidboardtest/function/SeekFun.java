@@ -1,34 +1,38 @@
 package com.thunder.ktv.androidboardtest.function;
 
+import com.thunder.ktv.androidboardtest.AppHelper;
 import com.thunder.ktv.androidboardtest.view.MyListViewAdapter;
 
 /**
  * Created by chengkai on 18-2-13.
  */
 
-public class SeekFun extends AbsFunction {
-    private int curPercent = 0;
-    int codeType = 0;
-
-    public int getCodeType() {
-        return codeType;
+abstract public class SeekFun extends AbsFunction {
+    public byte def = 0;
+    public int cur;
+    public byte max = 100;
+    public SeekFun(String showName, byte[] command,byte max, byte def) {
+        super(MyListViewAdapter.ItemViewTypeSeekBar,showName,command);
+        this.def = def;
+        this.cur = def;
+        this.max = max;
     }
-
-    public SeekFun(int codeType, String showName, byte[] command, byte minCode, byte maxCode, byte defCode) {
-        super(MyListViewAdapter.ItemViewTypeSeekBar,showName,command,minCode,maxCode,defCode);
-        curPercent = (defCode - minCode) * 100/(maxCode - minCode);
-        this.codeType = codeType;
-    }
-    public String getShowInfo()
+    public void up()
     {
-        return String.format("{%3d%%}Command:%02x %02x %02x,  Min %02x,Max %02x,Def %02x",
-                curPercent, command[0], command[1], command[2],minCode,maxCode,defCode);
+        cur+=2;
+        if(cur > max){
+            cur = max;
+        }
+        doAction(cur);
+        AppHelper.getMainActivity().upDataView();
     }
-    @Override
-    public boolean doAction(Object o) {
-        int code = (int) o;
-        command[command.length - 1] = (byte) ((byte) code + this.minCode);
-        curPercent = (code * 100 )/(maxCode - minCode);
-        return writeCode(command);
+    public void down()
+    {
+        cur-=2;
+        if(cur < 0){
+            cur = 0;
+        }
+        doAction(cur);
+        AppHelper.getMainActivity().upDataView();
     }
 }

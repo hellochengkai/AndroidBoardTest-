@@ -8,8 +8,8 @@ import com.thunder.ktv.thunderjni.thunderapi.TDHardwareHelper;
 public class ButtonFun extends AbsFunction{
     private static final String TAG = "ButtonFun";
 
-    public ButtonFun(String showName, byte[] command, byte minCode, byte maxCode, byte defCode) {
-        super(MyListViewAdapter.ItemViewTypeButton,showName, command, minCode, maxCode, defCode);
+    public ButtonFun(String showName, byte[] command) {
+        super(MyListViewAdapter.ItemViewTypeButton,showName, command);
     }
     byte[] byteread = new byte[10];
     int readlen = 0;

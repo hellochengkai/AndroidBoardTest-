@@ -13,7 +13,7 @@ public class GpioFun extends AbsFunction {
     private int gpio;
 //    private int vol = 0;
     public GpioFun(String showName,int gpio) {
-        super(MyListViewAdapter.ItemViewTypeSwitch,showName, null,(byte) 0,(byte) 0,(byte) 0);
+        super(MyListViewAdapter.ItemViewTypeSwitch,showName, null);
         this.gpio = gpio;
 //        this.vol = vol;
     }
