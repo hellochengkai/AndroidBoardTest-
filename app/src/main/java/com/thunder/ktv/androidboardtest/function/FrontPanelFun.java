@@ -20,15 +20,9 @@ import java.util.Set;
 public class FrontPanelFun extends AbsFunction {
     private static final String TAG = "FrontPanelFun";
     private static final byte [] powerCode =    {(byte) 0xEF, (byte) 0xc8, (byte) 0x00, (byte) 0xfe};
-//    private static final byte [] Code3Up =      {(byte) 0xEF, (byte) 0xc3, (byte) 0x02, (byte) 0xfe};
-//    private static final byte [] Code3Down =    {(byte) 0xEF, (byte) 0xc3, (byte) 0x03, (byte) 0xfe};
-//    private static final byte [] Code4Up =      {(byte) 0xEF, (byte) 0xc4, (byte) 0x02, (byte) 0xfe};
-//    private static final byte [] Code4Down =    {(byte) 0xEF, (byte) 0xc4, (byte) 0x03, (byte) 0xfe};
-//    private static final byte [] Code0Up =      {(byte) 0xEF, (byte) 0xc0, (byte) 0x02, (byte) 0xfe};
-//    private static final byte [] Code0Down =    {(byte) 0xEF, (byte) 0xc0, (byte) 0x03, (byte) 0xfe};
-//    private static final byte [] Code1Up =      {(byte) 0xEF, (byte) 0xc1, (byte) 0x02, (byte) 0xfe};
-//    private static final byte [] Code1Down =    {(byte) 0xEF, (byte) 0xc1, (byte) 0x03, (byte) 0xfe};
-
+    private static final byte [] effectCode1 =    {(byte) 0xEF, (byte) 0x90, (byte) 0x00, (byte) 0xfe};
+    private static final byte [] effectCode2 =    {(byte) 0xEF, (byte) 0x90, (byte) 0x01, (byte) 0xfe};
+    private static final byte [] effectCode3 =    {(byte) 0xEF, (byte) 0x90, (byte) 0x02, (byte) 0xfe};
 
     private class FrontPanelCode{
         String name;
@@ -123,6 +117,15 @@ public class FrontPanelFun extends AbsFunction {
                 if(Arrays.equals(bytes, powerCode)){
                     Log.d(TAG,"power up " + byteCode2String(powerCode, powerCode.length));
                     TDHardwareHelper.nativeWriteUart(fd, powerCode, powerCode.length);
+                }else if(Arrays.equals(bytes, effectCode1)) {
+                    RolandPrmFun rolandPrmFun = new RolandPrmFun("效果1","/sdcard/roland/01.prm");
+                    rolandPrmFun.doAction(null);
+                }else if(Arrays.equals(bytes, effectCode2)) {
+                    RolandPrmFun rolandPrmFun = new RolandPrmFun("效果2","/sdcard/roland/02.prm");
+                    rolandPrmFun.doAction(null);
+                }else if(Arrays.equals(bytes, effectCode3)) {
+                    RolandPrmFun rolandPrmFun = new RolandPrmFun("效果3","/sdcard/roland/03.prm");
+                    rolandPrmFun.doAction(null);
                 }else {
                     Iterator iterator = frontPanelCodes.iterator();
                     while (iterator.hasNext()){

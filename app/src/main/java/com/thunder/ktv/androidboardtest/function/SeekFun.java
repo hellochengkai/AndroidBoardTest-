@@ -17,9 +17,10 @@ abstract public class SeekFun extends AbsFunction {
         this.cur = def;
         this.max = max;
     }
+    int setup = 10;
     public void up()
     {
-        cur+=2;
+        cur+=setup;
         if(cur > max){
             cur = max;
         }
@@ -28,7 +29,7 @@ abstract public class SeekFun extends AbsFunction {
     }
     public void down()
     {
-        cur-=2;
+        cur-=setup;
         if(cur < 0){
             cur = 0;
         }
