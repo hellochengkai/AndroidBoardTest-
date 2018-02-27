@@ -1,5 +1,6 @@
 package com.thunder.ktv.androidboardtest;
 
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,8 +11,8 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
+import com.thunder.ktv.androidboardtest.function.FrontPanelFun;
 import com.thunder.ktv.androidboardtest.function.GpioFun;
 import com.thunder.ktv.androidboardtest.function.PlayerVolumeFun;
 import com.thunder.ktv.androidboardtest.player.THPlayer;
@@ -30,20 +31,28 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     Button buttonClear;
     THPlayer thPlayer;
-    SystemControlClientHelper systemControlClientHelper;
+    private Handler handler=null;
+    //    SystemControlClientHelper systemControlClientHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //创建属于主线程的handler
+        handler=new Handler();
+        AppHelper.setMainActivity(this);
         AppHelper.setContext(getApplicationContext());
         AppHelper.setUpdataMsg(new AppHelper.UpdataMsg() {
             @Override
             public void updataMsg(String msg) {
                 Log.d(TAG, "onCreate: updataMsg " + msg);
-                EditText editText = findViewById(R.id.msg);
-                editText.setText(msg);
-                editText.setSelection(editText.getText().length());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        EditText editText = findViewById(R.id.msg);
+                        editText.setText(msg);
+                        editText.setSelection(editText.getText().length());
+                    }
+                });
             }
         });
         try {
@@ -57,6 +66,16 @@ public class MainActivity extends AppCompatActivity {
         initview();
     }
     List<AbsFunction> list = null;
+    MyListViewAdapter mAdapter = null;
+    public void upDataView()
+    {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+    }
     void initview()
     {
         Button button = new Button(getApplicationContext());
@@ -64,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.list);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 //        MyListViewAdapter mAdapter = new MyListViewAdapter(defaultInfo.getFunctionInfo());
-        MyListViewAdapter mAdapter = new MyListViewAdapter(list);
+        mAdapter = new MyListViewAdapter(list);
         // 设置布局管理器
         recyclerView.setLayoutManager(mLayoutManager);
         // 设置adapter
@@ -105,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
         list = new ArrayList<>();
         byte[] bytes = new byte[2];
 
+        list.add(new FrontPanelFun("前面版控制开关"));
         bytes[0] = (byte) 0xbf;bytes[1] = (byte) 0x00;
         list.add(new ButtonFun("版本号 Version Request",bytes,(byte) 0x00,(byte) 0x00, (byte) 0x00));
 
@@ -112,10 +132,8 @@ public class MainActivity extends AppCompatActivity {
         list.add(new ButtonFun("内部版本号 Build No Request",bytes,(byte) 0x00,(byte) 0x00, (byte) 0x00));
 
         list.add(new GpioFun("GPIO 2-3",2*8+3));
-//        list.add(new GpioFun("GPIO 2-3 down",2*8+3,0));
 
         list.add(new GpioFun("GPIO 2-4",2*8+4));
-//        list.add(new GpioFun("GPIO 2-4 down",2*8+4,0));
 
         list.add(new RolandPrmFun("效果1","/sdcard/roland/01.prm"));
         list.add(new RolandPrmFun("效果2","/sdcard/roland/02.prm"));
@@ -125,27 +143,26 @@ public class MainActivity extends AppCompatActivity {
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x03;
         list.add(new PlayerVolumeFun("视频播放器音量"));
 
-
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x03;
-        list.add(new SeekFun("麦克风主音量 MIC Master",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
+        list.add(new SeekFun(MyListViewAdapter.BaseCode.TYPE_MIC,"麦克风主音量 MIC Master",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
 
         bytes[0] = (byte) 0xb3;bytes[1] = (byte) 0x02;
-        list.add(new SeekFun("音乐变调 Key Control Pitch",bytes,(byte) 0x34,(byte) 0x4c, (byte) 0x40));
+        list.add(new SeekFun(MyListViewAdapter.BaseCode.TYPE_UNKNOW,"音乐变调 Key Control Pitch",bytes,(byte) 0x34,(byte) 0x4c, (byte) 0x40));
 
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x41;
-        list.add(new SeekFun("外放音乐音量 Speaker MUSIC Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
+        list.add(new SeekFun(MyListViewAdapter.BaseCode.TYPE_MUSIC,"外放音乐音量 Speaker MUSIC Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x07;
-        list.add(new SeekFun("耳机音乐音量 Headphone MUSIC Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
+        list.add(new SeekFun(MyListViewAdapter.BaseCode.TYPE_MUSIC,"耳机音乐音量 Headphone MUSIC Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
 
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x42;
-        list.add(new SeekFun("外放延时 Speaker MIC Delay Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
+        list.add(new SeekFun(MyListViewAdapter.BaseCode.TYPE_DELAY,"外放延时 Speaker MIC Delay Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x43;
-        list.add(new SeekFun("外放混响 Speaker MIC Reverb Leve",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
+        list.add(new SeekFun(MyListViewAdapter.BaseCode.TYPE_ECHO,"外放混响 Speaker MIC Reverb Leve",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
 
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x1d;
-        list.add(new SeekFun("耳机延时 Headphone MIC Delay Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
+        list.add(new SeekFun(MyListViewAdapter.BaseCode.TYPE_DELAY,"耳机延时 Headphone MIC Delay Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x1e;
-        list.add(new SeekFun("耳机混响 Headphone MIC Reverb Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
+        list.add(new SeekFun(MyListViewAdapter.BaseCode.TYPE_ECHO,"耳机混响 Headphone MIC Reverb Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
 
         thPlayer = new THPlayer(null);
         AppHelper.setThPlayer(thPlayer);

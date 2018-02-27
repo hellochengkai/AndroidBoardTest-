@@ -13,20 +13,14 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.thunder.ktv.androidboardtest.AppHelper;
 import com.thunder.ktv.androidboardtest.R;
 import com.thunder.ktv.androidboardtest.function.AbsFunction;
-import com.thunder.ktv.androidboardtest.function.ButtonFun;
-import com.thunder.ktv.androidboardtest.function.GpioFun;
-import com.thunder.ktv.androidboardtest.function.PlayerVolumeFun;
-import com.thunder.ktv.androidboardtest.function.RolandPrmFun;
 import com.thunder.ktv.androidboardtest.function.SeekFun;
 
-import java.text.BreakIterator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * Created by chengkai on 18-2-7.
@@ -37,7 +31,55 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public static final int ItemViewTypeButton = 0;
     public static final int ItemViewTypeSeekBar = 1;
     public static final int ItemViewTypeSwitch = 2;
-    public static Map<Integer,Integer> seekMap ;
+
+    private void updataView()
+    {
+//        this.notifyDataSetChanged();
+    }
+
+    public class BaseCode{
+        public final static int TYPE_UNKNOW = -1;
+        public final static int TYPE_DELAY = 0;
+        public final static int TYPE_ECHO = 1;
+        public final static int TYPE_MIC = 2;
+        public final static int TYPE_MUSIC = 3;
+        String name;
+        int type;
+        int curCode;
+        int minCode;
+        int maxCode;
+
+        public int getType() {
+            return type;
+        }
+
+        public void up()
+        {
+            curCode++;
+            if(curCode > maxCode){
+                curCode = maxCode;
+            }
+            updataView();
+        }
+        public void down()
+        {
+            curCode--;
+            if(curCode < minCode){
+                curCode = minCode;
+            }
+            updataView();
+        }
+
+        public BaseCode(String name, int type, int curCode, int minCode, int maxCode) {
+            this.name = name;
+            this.type = type;
+            this.curCode = curCode;
+            this.minCode = minCode;
+            this.maxCode = maxCode;
+        }
+    }
+
+    public static Map<Integer,BaseCode> seekMap ;
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder = null;
@@ -69,7 +111,19 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.list = list;
         seekMap = new HashMap<>();
         for (int i = 0;i< list.size();i++){
-            seekMap.put(i,list.get(i).defCode - list.get(i).minCode);
+            if(list.get(i).showType == ItemViewTypeSeekBar){
+                int CodeType = BaseCode.TYPE_UNKNOW;
+                if(list.get(i) instanceof SeekFun){
+                    SeekFun seekFun = (SeekFun) list.get(i);
+                    CodeType = seekFun.getCodeType();
+                }
+                seekMap.put(i,new BaseCode(
+                        list.get(i).getShowName(),
+                        CodeType,
+                        list.get(i).defCode - list.get(i).minCode,
+                        list.get(i).minCode,
+                        list.get(i).maxCode));
+            }
         }
     }
 
@@ -120,7 +174,11 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         @Override
         public void OnBindViewHolder(AbsFunction absFunction,int position) {
-            int seekVol  = MyListViewAdapter.seekMap.get(position);
+            int seekVol  = 0;
+            BaseCode baseCode = MyListViewAdapter.seekMap.get(position);
+            if(baseCode != null){
+                seekVol = baseCode.curCode;
+            }
             textViewName.setText(absFunction.getShowName());
             seekbar.setMax(absFunction.maxCode - absFunction.minCode);
             seekbar.setProgress(seekVol);
@@ -128,10 +186,15 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        MyListViewAdapter.seekMap.remove(position);
-                        MyListViewAdapter.seekMap.put(position,seekBar.getProgress());
-                        int seekVol  = MyListViewAdapter.seekMap.get(position);
-
+                        MyListViewAdapter.seekMap.get(position).curCode = seekBar.getProgress();
+                        BaseCode baseCode = MyListViewAdapter.seekMap.get(position);
+                        if(baseCode == null){
+                            Log.d(TAG, "baseCode == null position is " + position);
+                            return;
+                        }
+                        baseCode.curCode = seekBar.getProgress();
+//                        MyListViewAdapter.seekMap.put(position,seekBar.getProgress());
+                        int seekVol = baseCode.curCode;
                         Log.d(TAG, fromUser + "  onBindViewHolder: " + absFunction.getShowName() +"   "+ seekVol);
 
                         absFunction.doAction(seekVol);

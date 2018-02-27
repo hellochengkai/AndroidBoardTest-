@@ -59,6 +59,10 @@ int set_opt(int fd ,int rate)  /////设置串口
             s = B2400;
             break;
         }
+        case 4800:{
+            s = B4800;
+            break;
+        }
         case 9600:{
             s = B9600;
             break;

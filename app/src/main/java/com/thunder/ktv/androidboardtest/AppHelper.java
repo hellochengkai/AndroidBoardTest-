@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.thunder.ktv.androidboardtest.player.THPlayer;
+import com.thunder.ktv.androidboardtest.view.MyListViewAdapter;
 
 import java.util.Observable;
 
@@ -13,6 +14,15 @@ import java.util.Observable;
 
 public class AppHelper{
     static Context context;
+    static MainActivity mainActivity = null;
+
+    static public MainActivity getMainActivity() {
+        return mainActivity;
+    }
+
+    static public void setMainActivity(MainActivity mainActivity) {
+        AppHelper.mainActivity = mainActivity;
+    }
 
     static public Context getContext() {
         return context;
@@ -25,6 +35,9 @@ public class AppHelper{
     private static int msgConut = 0;
     public static void showMsg(String msg)
     {
+        if(msg == null){
+            return;
+        }
         AppHelper.allmsg  = AppHelper.allmsg  + msgConut+":" + msg +"\n";
         if(updataMsg == null){
             Toast.makeText(AppHelper.getContext(), msg,

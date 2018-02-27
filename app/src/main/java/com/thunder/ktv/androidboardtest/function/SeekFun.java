@@ -8,10 +8,16 @@ import com.thunder.ktv.androidboardtest.view.MyListViewAdapter;
 
 public class SeekFun extends AbsFunction {
     private int curPercent = 0;
+    int codeType = 0;
 
-    public SeekFun(String showName, byte[] command,byte minCode,byte maxCode,byte defCode) {
+    public int getCodeType() {
+        return codeType;
+    }
+
+    public SeekFun(int codeType, String showName, byte[] command, byte minCode, byte maxCode, byte defCode) {
         super(MyListViewAdapter.ItemViewTypeSeekBar,showName,command,minCode,maxCode,defCode);
         curPercent = (defCode - minCode) * 100/(maxCode - minCode);
+        this.codeType = codeType;
     }
     public String getShowInfo()
     {
