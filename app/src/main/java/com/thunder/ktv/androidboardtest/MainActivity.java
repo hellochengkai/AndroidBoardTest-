@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     Button buttonClear;
     THPlayer thPlayer;
+    private String[] thPlayerList = {"/sdcard/video/test0.ts","/sdcard/video/test1.ts"};
+    private int curPlayIndex = 0;
     private Handler handler=null;
     //    SystemControlClientHelper systemControlClientHelper;
     @Override
@@ -103,7 +105,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
                 try {
-                    thPlayer.play("/sdcard/video/test.ts",holder);
+                    thPlayer.play(thPlayerList[curPlayIndex],holder);
+                    curPlayIndex++;
+                    if(curPlayIndex >= thPlayerList.length){
+                        curPlayIndex = 0;
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -120,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         findViewById(R.id.bt_audio_select).setOnClickListener(onClickListener);
+        findViewById(R.id.bt_video_select).setOnClickListener(onClickListener);
     }
     void initData(){
         list = new ArrayList<>();
@@ -165,6 +172,12 @@ public class MainActivity extends AppCompatActivity {
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x1e;
         list.add(new EditorFun(EditorFun.TYPE_ECHO,"耳机混响 Headphone MIC Reverb Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
 
+        bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x0c;
+        list.add(new EditorFun(EditorFun.TYPE_UNKNOW,"AUX到音乐 AUX to MUSIC Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x00));
+
+        bytes[0] = (byte) 0xb1;bytes[1] = (byte) 0x75;
+        list.add(new EditorFun(EditorFun.TYPE_UNKNOW,"麦克风反馈抑制 移频量 Feedback Control Freq",bytes,(byte) 0x36,(byte) 0x4a, (byte) 0x40));
+
         thPlayer = new THPlayer(null);
         AppHelper.setThPlayer(thPlayer);
     }
@@ -177,6 +190,12 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.bt_audio_select:{
                     Button button = (Button) v;
                     button.setText("切换音轨 " +  thPlayer.audio_select());
+                    break;
+                }
+                case R.id.bt_video_select:{
+                    SurfaceView surfaceView = findViewById(R.id.surface);
+                    surfaceView.setVisibility(View.GONE);
+                    surfaceView.setVisibility(View.VISIBLE);
                     break;
                 }
                 default:{

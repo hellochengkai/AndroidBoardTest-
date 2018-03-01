@@ -107,8 +107,25 @@ public class FrontPanelFun extends AbsFunction {
         boolean needRead = false;
         int fd = 0;
 
+
+        void doRolandPrmFun(String name)
+        {
+            List list = MyListViewAdapter.list;
+            if(list == null){
+                return;
+            }
+            for (int i = 0; i < list.size();i ++){
+                if(list.get(i) instanceof RolandPrmFun){
+                    if(((RolandPrmFun) list.get(i)).getShowName().equals(name)){
+                        ((RolandPrmFun) list.get(i)).doAction(null);
+                    }
+                }
+            }
+        }
+
         void readCode()
         {
+            List list = MyListViewAdapter.list;
             Arrays.fill(bytes, (byte) 0);
             int ret = TDHardwareHelper.nativeReadUart(fd,bytes,bytes.length);
             if(ret > 0){
@@ -118,14 +135,11 @@ public class FrontPanelFun extends AbsFunction {
                     Log.d(TAG,"power up " + byteCode2String(powerCode, powerCode.length));
                     TDHardwareHelper.nativeWriteUart(fd, powerCode, powerCode.length);
                 }else if(Arrays.equals(bytes, effectCode1)) {
-                    RolandPrmFun rolandPrmFun = new RolandPrmFun("效果1","/sdcard/roland/01.prm");
-                    rolandPrmFun.doAction(null);
+                    doRolandPrmFun("效果1");
                 }else if(Arrays.equals(bytes, effectCode2)) {
-                    RolandPrmFun rolandPrmFun = new RolandPrmFun("效果2","/sdcard/roland/02.prm");
-                    rolandPrmFun.doAction(null);
+                    doRolandPrmFun("效果2");
                 }else if(Arrays.equals(bytes, effectCode3)) {
-                    RolandPrmFun rolandPrmFun = new RolandPrmFun("效果3","/sdcard/roland/03.prm");
-                    rolandPrmFun.doAction(null);
+                    doRolandPrmFun("效果3");
                 }else {
                     Iterator iterator = frontPanelCodes.iterator();
                     while (iterator.hasNext()){

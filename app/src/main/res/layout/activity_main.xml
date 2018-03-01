@@ -39,6 +39,11 @@
                 android:layout_height="wrap_content"
                 android:text="清除信息"/>
             <Button
+                android:id="@+id/bt_video_select"
+                android:text="切换视频"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Button
                 android:id="@+id/bt_audio_select"
                 android:text="切换音轨"
                 android:layout_width="wrap_content"
