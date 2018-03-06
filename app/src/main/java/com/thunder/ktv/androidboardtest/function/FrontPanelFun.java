@@ -165,6 +165,7 @@ public class FrontPanelFun extends AbsFunction {
                 if(Arrays.equals(bytes, powerCode)){
                     Log.d(TAG,"power up " + byteCode2String(powerCode, powerCode.length));
                     TDHardwareHelper.nativeWriteUart(fd, powerCode, powerCode.length);
+                    RolandCodeManage.clear();
                 }else if(Arrays.equals(bytes, effectCodeup)) {
                     doRolandPrmFunUp();
                 }else if(Arrays.equals(bytes, effectCodeDowm)) {

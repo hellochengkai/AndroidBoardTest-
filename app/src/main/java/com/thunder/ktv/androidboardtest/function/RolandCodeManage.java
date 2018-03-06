@@ -22,4 +22,8 @@ public class RolandCodeManage {
         }
         return false;
     }
+    static public void clear()
+    {
+        codeMap.clear();
+    }
 }
