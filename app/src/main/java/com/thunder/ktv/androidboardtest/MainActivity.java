@@ -11,6 +11,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.thunder.ktv.androidboardtest.function.EditorFun;
 import com.thunder.ktv.androidboardtest.function.FrontPanelFun;
@@ -20,7 +21,6 @@ import com.thunder.ktv.androidboardtest.player.THPlayer;
 import com.thunder.ktv.androidboardtest.function.AbsFunction;
 import com.thunder.ktv.androidboardtest.function.ButtonFun;
 import com.thunder.ktv.androidboardtest.function.RolandPrmFun;
-import com.thunder.ktv.androidboardtest.function.SeekFun;
 import com.thunder.ktv.androidboardtest.view.MyListViewAdapter;
 import com.thunder.ktv.thunderjni.manager.LibsManager;
 
@@ -32,7 +32,19 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     Button buttonClear;
     THPlayer thPlayer;
-    private String[] thPlayerList = {"/sdcard/video/test0.ts","/sdcard/video/test1.ts"};
+    private String[] thPlayerList = {
+            "/sdcard/video/1.ts",
+            "/sdcard/video/2.ts",
+            "/sdcard/video/3.ts",
+            "/sdcard/video/4.ts",
+            "/sdcard/video/5.ts",
+            "/sdcard/video/6.ts",
+            "/sdcard/video/7.ts",
+            "/sdcard/video/8.ts",
+            "/sdcard/video/9.ts",
+            "/sdcard/video/10.ts"
+    };
+
     private int curPlayIndex = 0;
     private Handler handler=null;
     //    SystemControlClientHelper systemControlClientHelper;
@@ -105,6 +117,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
                 try {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            TextView textView = findViewById(R.id.tv_video_name);
+                            textView.setText(thPlayerList[curPlayIndex]);
+                        }
+                    });
                     thPlayer.play(thPlayerList[curPlayIndex],holder);
                     curPlayIndex++;
                     if(curPlayIndex >= thPlayerList.length){
@@ -163,14 +182,14 @@ public class MainActivity extends AppCompatActivity {
         list.add(new EditorFun(EditorFun.TYPE_MUSIC,"耳机音乐音量 Headphone MUSIC Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
 
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x42;
-        list.add(new EditorFun(EditorFun.TYPE_DELAY,"外放延时 Speaker MIC Delay Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
+        list.add(new EditorFun(EditorFun.TYPE_ECHO_DELAY,"外放延时 Speaker MIC Delay Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x43;
-        list.add(new EditorFun(EditorFun.TYPE_ECHO,"外放混响 Speaker MIC Reverb Leve",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
+        list.add(new EditorFun(EditorFun.TYPE_ECHO_DELAY,"外放混响 Speaker MIC Reverb Leve",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
 
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x1d;
-        list.add(new EditorFun(EditorFun.TYPE_DELAY,"耳机延时 Headphone MIC Delay Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
+        list.add(new EditorFun(EditorFun.TYPE_ECHO_DELAY,"耳机延时 Headphone MIC Delay Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x1e;
-        list.add(new EditorFun(EditorFun.TYPE_ECHO,"耳机混响 Headphone MIC Reverb Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
+        list.add(new EditorFun(EditorFun.TYPE_ECHO_DELAY,"耳机混响 Headphone MIC Reverb Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
 
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x0c;
         list.add(new EditorFun(EditorFun.TYPE_UNKNOW,"AUX到音乐 AUX to MUSIC Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x00));

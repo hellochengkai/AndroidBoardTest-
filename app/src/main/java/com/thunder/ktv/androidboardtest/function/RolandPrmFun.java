@@ -10,6 +10,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by chengkai on 18-2-22.
@@ -17,40 +20,38 @@ import java.io.IOException;
 
 public class RolandPrmFun extends AbsFunction {
     private static final String TAG = "RolandPrmFun";
-    private String path = null;
+
+    List<byte[]> codeList = null;
     public RolandPrmFun(String showName,String path) {
         super(MyListViewAdapter.ItemViewTypeButton,showName, null);
-        this.path = path;
+        codeList = new ArrayList<>();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                loadCode(path);
+            }
+        }).start();
     }
-    byte [] head = new byte[16];
-
-
-    private int writeCodeNum = 0;
-    @Override
-    public boolean doAction(Object o) {
-        writeCodeNum = 0;
-        int readLen = 0;
+    private boolean isInit = false;
+    private byte [] head = new byte[16];
+    private boolean loadCode(String path)
+    {
         File file = new File(path);
         if(!file.exists()){
-            AppHelper.showMsg("获取"+path+"文件失败!!!");
+            AppHelper.showMsg(showName + "获取"+path+"文件失败!!!");
             return false;
         }
+        int readLen = 0;
         FileInputStream fileInputStream = null;
         try {
             fileInputStream = new FileInputStream(file);
             readLen = fileInputStream.read(head);
             if(readLen != head.length){
-                AppHelper.showMsg("获取头信息失败!!!");
+                AppHelper.showMsg(showName + "获取头信息失败!!!");
             }
             if(!new String(head).startsWith("Roland")){
-                AppHelper.showMsg("获取头信息失败!!!");
+                AppHelper.showMsg(showName + "获取头信息失败!!!");
             }
-            int fd = TDHardwareHelper.nativeOpenUart(UART_DEV.getBytes(),UART_RATE);
-            if(fd < 0){
-                AppHelper.showMsg(String.format("串口%s %d 打开失败",UART_DEV,UART_RATE));
-                return false;
-            }
-            Log.d(TAG, "doAction: head " + new String(head));
             while (true){
                 byte[] code = new byte[3];
                 readLen = fileInputStream.read(code);
@@ -61,26 +62,47 @@ public class RolandPrmFun extends AbsFunction {
                     Log.d(TAG, "doAction: read over " + readLen);
                     break;
                 }
-                short key = (short) ((code[0] << 8) + code[1]);
-                if(RolandCodeManage.addCode(key,code[2]))
-                {
-                    writeCodeNum++;
-                    int writeLen = TDHardwareHelper.nativeWriteUart(fd, code, code.length);
-                    if(writeLen != code.length){
-                        AppHelper.showMsg("[Tx error]:" + byteCode2String(code));
-                    }else{
-                        AppHelper.showMsg("[Tx]:" + byteCode2String(code));
-                    }
-                }
+                codeList.add(code);
             }
-            AppHelper.showMsg("写入完毕("+writeCodeNum+")!!!");
-            TDHardwareHelper.nativeCloseUart(fd);
+            isInit = true;
             fileInputStream.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return true;
+    }
+    private int writeCodeNum = 0;
+    @Override
+    public boolean doAction(Object o) {
+        if(isInit == false){
+            AppHelper.showMsg(String.format(showName + " 码值未加载！！"));
+            return false;
+        }
+        writeCodeNum = 0;
+        int fd = TDHardwareHelper.nativeOpenUart(UART_DEV.getBytes(),UART_RATE);
+        if(fd < 0){
+            AppHelper.showMsg(String.format("串口%s %d 打开失败",UART_DEV,UART_RATE));
+            return false;
+        }
+        Log.d(TAG, "doAction: head " + new String(head));
+        Iterator iterator = codeList.iterator();
+        while (iterator.hasNext()){
+            byte[] code = (byte[]) iterator.next();
+            short key = (short) ((code[0] << 8) + code[1]);
+            if(RolandCodeManage.addCode(key,code[2])) {
+                writeCodeNum++;
+                int writeLen = TDHardwareHelper.nativeWriteUart(fd, code, code.length);
+                if(writeLen != code.length){
+                    AppHelper.showMsg("[Tx error]:" + byteCode2String(code));
+                }else{
+//                    AppHelper.showMsg("[Tx]:" + byteCode2String(code));
+                }
+            }
+        }
+        AppHelper.showMsg( showName + " 写入完毕("+writeCodeNum+")!!!");
+        TDHardwareHelper.nativeCloseUart(fd);
         return false;
     }
 

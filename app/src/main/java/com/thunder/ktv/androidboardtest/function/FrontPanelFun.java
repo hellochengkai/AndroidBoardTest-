@@ -1,7 +1,6 @@
 package com.thunder.ktv.androidboardtest.function;
 
 import android.util.Log;
-import android.widget.EditText;
 
 import com.thunder.ktv.androidboardtest.AppHelper;
 import com.thunder.ktv.androidboardtest.view.MyListViewAdapter;
@@ -11,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by chengkai on 18-2-24.
@@ -20,9 +18,11 @@ import java.util.Set;
 public class FrontPanelFun extends AbsFunction {
     private static final String TAG = "FrontPanelFun";
     private static final byte [] powerCode =    {(byte) 0xEF, (byte) 0xc8, (byte) 0x00, (byte) 0xfe};
-    private static final byte [] effectCode1 =    {(byte) 0xEF, (byte) 0x90, (byte) 0x00, (byte) 0xfe};
-    private static final byte [] effectCode2 =    {(byte) 0xEF, (byte) 0x90, (byte) 0x01, (byte) 0xfe};
-    private static final byte [] effectCode3 =    {(byte) 0xEF, (byte) 0x90, (byte) 0x02, (byte) 0xfe};
+//    private static final byte [] effectCode1 =    {(byte) 0xEF, (byte) 0x90, (byte) 0x00, (byte) 0xfe};
+//    private static final byte [] effectCode2 =    {(byte) 0xEF, (byte) 0x90, (byte) 0x01, (byte) 0xfe};
+//    private static final byte [] effectCode3 =    {(byte) 0xEF, (byte) 0x90, (byte) 0x02, (byte) 0xfe};
+    private static final byte [] effectCodeup =    {(byte) 0xEF, (byte) 0xc3, (byte) 0x02, (byte) 0xfe};
+    private static final byte [] effectCodeDowm =    {(byte) 0xEF, (byte) 0xc3, (byte) 0x03, (byte) 0xfe};
 
     private class FrontPanelCode{
         String name;
@@ -79,8 +79,8 @@ public class FrontPanelFun extends AbsFunction {
     void initCode()
     {
         frontPanelCodes = new ArrayList<>();
-        frontPanelCodes.add(new FrontPanelCode(EditorFun.TYPE_ECHO,"echo", (byte) 0xc4));
-        frontPanelCodes.add(new FrontPanelCode(EditorFun.TYPE_DELAY,"delay", (byte) 0xc3));
+//        frontPanelCodes.add(new FrontPanelCode(EditorFun.TYPE_DELAY,"delay", (byte) 0xc3));
+        frontPanelCodes.add(new FrontPanelCode(EditorFun.TYPE_ECHO_DELAY,"echo", (byte) 0xc4));
         frontPanelCodes.add(new FrontPanelCode(EditorFun.TYPE_MUSIC,"music", (byte) 0xc0));
         frontPanelCodes.add(new FrontPanelCode(EditorFun.TYPE_MIC,"mic",(byte) 0xc1));
     }
@@ -122,6 +122,37 @@ public class FrontPanelFun extends AbsFunction {
                 }
             }
         }
+        List<RolandPrmFun> rolandPrmFuns = null;
+        int indesFuns = 0;
+        void initRolandPrmFuns()
+        {
+            if(rolandPrmFuns != null){
+                return;
+            }
+            rolandPrmFuns = new ArrayList<>();
+            rolandPrmFuns.add(new RolandPrmFun("效果1","/sdcard/roland/01.prm"));
+            rolandPrmFuns.add(new RolandPrmFun("效果2","/sdcard/roland/02.prm"));
+            rolandPrmFuns.add(new RolandPrmFun("效果3","/sdcard/roland/03.prm"));
+            rolandPrmFuns.add(new RolandPrmFun("效果4","/sdcard/roland/04.prm"));
+        }
+        void doRolandPrmFunUp()
+        {
+            initRolandPrmFuns();
+            indesFuns++;
+            if(indesFuns >= rolandPrmFuns.size()){
+                indesFuns = 0;
+            }
+            rolandPrmFuns.get(indesFuns).doAction(null);
+        }
+        void doRolandPrmFunDown()
+        {
+            initRolandPrmFuns();
+            indesFuns--;
+            if(indesFuns <= -1){
+                indesFuns = rolandPrmFuns.size() - 1;
+            }
+            rolandPrmFuns.get(indesFuns).doAction(null);
+        }
 
         void readCode()
         {
@@ -134,12 +165,10 @@ public class FrontPanelFun extends AbsFunction {
                 if(Arrays.equals(bytes, powerCode)){
                     Log.d(TAG,"power up " + byteCode2String(powerCode, powerCode.length));
                     TDHardwareHelper.nativeWriteUart(fd, powerCode, powerCode.length);
-                }else if(Arrays.equals(bytes, effectCode1)) {
-                    doRolandPrmFun("效果1");
-                }else if(Arrays.equals(bytes, effectCode2)) {
-                    doRolandPrmFun("效果2");
-                }else if(Arrays.equals(bytes, effectCode3)) {
-                    doRolandPrmFun("效果3");
+                }else if(Arrays.equals(bytes, effectCodeup)) {
+                    doRolandPrmFunUp();
+                }else if(Arrays.equals(bytes, effectCodeDowm)) {
+                    doRolandPrmFunDown();
                 }else {
                     Iterator iterator = frontPanelCodes.iterator();
                     while (iterator.hasNext()){

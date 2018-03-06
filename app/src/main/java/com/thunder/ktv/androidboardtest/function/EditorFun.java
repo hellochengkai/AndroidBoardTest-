@@ -7,8 +7,8 @@ package com.thunder.ktv.androidboardtest.function;
 public class EditorFun extends SeekFun{
 
     public final static int TYPE_UNKNOW = -1;
-    public final static int TYPE_DELAY = 0;
-    public final static int TYPE_ECHO = 1;
+//    public final static int TYPE_DELAY = 0;
+    public final static int TYPE_ECHO_DELAY = 1;
     public final static int TYPE_MIC = 2;
     public final static int TYPE_MUSIC = 3;
     public int codeType = TYPE_UNKNOW;
