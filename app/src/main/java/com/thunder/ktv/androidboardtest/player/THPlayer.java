@@ -45,7 +45,7 @@ public class THPlayer implements IThunderPlayerListener {
         ijkMediaPlayer.setOnPreparedListener(this);
         ijkMediaPlayer.setOnCompletionListener(this);
         ijkMediaPlayer.setOnErrorListener(this);
-        ijkMediaPlayer.setLooping(true);
+//        ijkMediaPlayer.setLooping(true);
     }
 
     private String curPath = null;

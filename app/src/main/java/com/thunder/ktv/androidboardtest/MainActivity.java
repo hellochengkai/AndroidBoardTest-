@@ -21,12 +21,15 @@ import com.thunder.ktv.androidboardtest.player.THPlayer;
 import com.thunder.ktv.androidboardtest.function.AbsFunction;
 import com.thunder.ktv.androidboardtest.function.ButtonFun;
 import com.thunder.ktv.androidboardtest.function.RolandPrmFun;
+import com.thunder.ktv.androidboardtest.player.listener.IThunderPlayerListener;
 import com.thunder.ktv.androidboardtest.view.MyListViewAdapter;
 import com.thunder.ktv.thunderjni.manager.LibsManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -197,7 +200,24 @@ public class MainActivity extends AppCompatActivity {
         bytes[0] = (byte) 0xb1;bytes[1] = (byte) 0x75;
         list.add(new EditorFun(EditorFun.TYPE_UNKNOW,"麦克风反馈抑制 移频量 Feedback Control Freq",bytes,(byte) 0x36,(byte) 0x4a, (byte) 0x40));
 
-        thPlayer = new THPlayer(null);
+        thPlayer = new THPlayer(new IThunderPlayerListener() {
+            @Override
+            public void onCompletion(IMediaPlayer iMediaPlayer) {
+                SurfaceView surfaceView = findViewById(R.id.surface);
+                surfaceView.setVisibility(View.GONE);
+                surfaceView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public boolean onError(IMediaPlayer iMediaPlayer, int i, int i1) {
+                return false;
+            }
+
+            @Override
+            public void onPrepared(IMediaPlayer iMediaPlayer) {
+
+            }
+        });
         AppHelper.setThPlayer(thPlayer);
     }
 
