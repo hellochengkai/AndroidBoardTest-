@@ -3,6 +3,7 @@ package com.thunder.ktv.androidboardtest.function;
 import android.util.Log;
 
 import com.thunder.ktv.androidboardtest.AppHelper;
+import com.thunder.ktv.androidboardtest.function.basefun.AbsFunction;
 import com.thunder.ktv.androidboardtest.view.MyListViewAdapter;
 import com.thunder.ktv.thunderjni.thunderapi.TDHardwareHelper;
 

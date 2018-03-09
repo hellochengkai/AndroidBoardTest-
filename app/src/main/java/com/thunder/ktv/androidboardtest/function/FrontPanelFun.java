@@ -3,6 +3,7 @@ package com.thunder.ktv.androidboardtest.function;
 import android.util.Log;
 
 import com.thunder.ktv.androidboardtest.AppHelper;
+import com.thunder.ktv.androidboardtest.function.basefun.AbsFunction;
 import com.thunder.ktv.androidboardtest.view.MyListViewAdapter;
 import com.thunder.ktv.thunderjni.thunderapi.TDHardwareHelper;
 
@@ -59,15 +60,15 @@ public class FrontPanelFun extends AbsFunction {
 
             while (iterator.hasNext()){
                 AbsFunction absFunction = (AbsFunction) iterator.next();
-                if((absFunction instanceof EditorFun) == false)
-                    continue;
-                EditorFun editorFun = (EditorFun) absFunction;
-                if(type == editorFun.codeType){
-                    Log.d(TAG, "editorFun: " + editorFun.showName + type + " " + editorFun.codeType);
-                    if(isUpCode(code)){
-                        editorFun.up();
-                    }else if(isDownCode(code)){
-                        editorFun.down();
+                if((absFunction instanceof EditorFun)){
+                    EditorFun editorFun = (EditorFun) absFunction;
+                    if(type == editorFun.codeType){
+                        Log.d(TAG, "editorFun: " + editorFun.showName + type + " " + editorFun.codeType);
+                        if(isUpCode(code)){
+                            editorFun.up();
+                        }else if(isDownCode(code)){
+                            editorFun.down();
+                        }
                     }
                 }
             }
@@ -104,7 +105,7 @@ public class FrontPanelFun extends AbsFunction {
 
     private class ReadCodeRunnable implements Runnable {
         byte [] bytes = new byte[4];
-        boolean needRead = false;
+        boolean needRead = true;
         int fd = 0;
 
 
@@ -130,28 +131,28 @@ public class FrontPanelFun extends AbsFunction {
                 return;
             }
             rolandPrmFuns = new ArrayList<>();
+            rolandPrmFuns.add(new RolandPrmFun("默认效果","/sdcard/roland/02.prm"));
             rolandPrmFuns.add(new RolandPrmFun("效果1","/sdcard/roland/01.prm"));
-            rolandPrmFuns.add(new RolandPrmFun("效果2","/sdcard/roland/02.prm"));
             rolandPrmFuns.add(new RolandPrmFun("效果3","/sdcard/roland/03.prm"));
             rolandPrmFuns.add(new RolandPrmFun("效果4","/sdcard/roland/04.prm"));
         }
         void doRolandPrmFunUp()
         {
             initRolandPrmFuns();
+            rolandPrmFuns.get(indesFuns).doAction(null);
             indesFuns++;
             if(indesFuns >= rolandPrmFuns.size()){
                 indesFuns = 0;
             }
-            rolandPrmFuns.get(indesFuns).doAction(null);
         }
         void doRolandPrmFunDown()
         {
             initRolandPrmFuns();
+            rolandPrmFuns.get(indesFuns).doAction(null);
             indesFuns--;
             if(indesFuns <= -1){
                 indesFuns = rolandPrmFuns.size() - 1;
             }
-            rolandPrmFuns.get(indesFuns).doAction(null);
         }
 
         void readCode()

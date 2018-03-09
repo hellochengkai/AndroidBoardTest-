@@ -1,10 +1,12 @@
 package com.thunder.ktv.androidboardtest.function;
 
+import com.thunder.ktv.androidboardtest.function.basefun.SeekFun;
+
 /**
  * Created by chengkai on 18-2-27.
  */
 
-public class EditorFun extends SeekFun{
+public class EditorFun extends SeekFun {
 
     public final static int TYPE_UNKNOW = -1;
 //    public final static int TYPE_DELAY = 0;
@@ -17,7 +19,9 @@ public class EditorFun extends SeekFun{
         super(showName, command,(byte) (maxCode - minCode), (byte) (defCode - minCode));
         offsetCode = minCode;
         this.codeType = codeType;
-        this.command[this.command.length - 1] = defCode;
+        if(command != null){
+            this.command[this.command.length - 1] = defCode;
+        }
     }
 
     int getCurPercent(byte code)

@@ -16,13 +16,13 @@
         <TextView
             android:id="@+id/item_tv_name"
             android:textColor="@color/colorPrimary"
-            android:textSize="40pt"
+            android:textSize="30pt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="item"/>
         <TextView
             android:id="@+id/item_tv_info"
-            android:textSize="30pt"
+            android:textSize="25pt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="item"/>
@@ -35,20 +35,22 @@
         <Button
             android:id="@+id/item_bt_seekBar_down"
             android:text="-"
+            android:textSize="20pt"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="65pt"
             />
         <SeekBar
             android:progress="0"
             android:id="@+id/seekBar"
             android:layout_width="500pt"
             android:layout_gravity="center_vertical"
-            android:layout_height="wrap_content"/>
+            android:layout_height="22pt"/>
         <Button
             android:id="@+id/item_bt_seekBar_up"
             android:text="+"
+            android:textSize="20pt"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="65pt"
             />
     </LinearLayout>
 

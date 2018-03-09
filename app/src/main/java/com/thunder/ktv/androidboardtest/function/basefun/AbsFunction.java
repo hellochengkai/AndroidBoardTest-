@@ -1,4 +1,4 @@
-package com.thunder.ktv.androidboardtest.function;
+package com.thunder.ktv.androidboardtest.function.basefun;
 
 import com.thunder.ktv.androidboardtest.AppHelper;
 import com.thunder.ktv.thunderjni.thunderapi.TDHardwareHelper;
@@ -37,8 +37,8 @@ abstract public class AbsFunction {
     }
 
 
-    protected String showName;
-    protected byte[] command;
+    public String showName;
+    public byte[] command;
 
     abstract public boolean doAction(Object o);
 
@@ -62,7 +62,7 @@ abstract public class AbsFunction {
         }
         return codeStr;
     }
-    protected String byteCode2String(byte[] code)
+    public String byteCode2String(byte[] code)
     {
         String codeStr = new String();
         if(code == null || code.length == 0){

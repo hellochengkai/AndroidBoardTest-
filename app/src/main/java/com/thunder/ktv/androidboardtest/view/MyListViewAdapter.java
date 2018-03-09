@@ -13,14 +13,13 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.thunder.ktv.androidboardtest.AppHelper;
 import com.thunder.ktv.androidboardtest.R;
-import com.thunder.ktv.androidboardtest.function.AbsFunction;
-import com.thunder.ktv.androidboardtest.function.SeekFun;
+import com.thunder.ktv.androidboardtest.function.basefun.AbsFunction;
+import com.thunder.ktv.androidboardtest.function.basefun.ButtonListFun;
+import com.thunder.ktv.androidboardtest.function.basefun.SeekFun;
+import com.thunder.ktv.androidboardtest.function.basefun.SwitchListFun;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by chengkai on 18-2-7.
@@ -171,46 +170,83 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
     private static class ViewHolderButton extends MYViewHolder {
         TextView textViewInfo;
-        Button button;
+        Button[] buttons = new Button[4];
         public ViewHolderButton(View itemView) {
             super(itemView);
             textViewInfo = itemView.findViewById(R.id.item_tv_info);
-            button = itemView.findViewById(R.id.item_bt);
+            buttons[0] = itemView.findViewById(R.id.item_bt1);
+            buttons[1] = itemView.findViewById(R.id.item_bt2);
+            buttons[2] = itemView.findViewById(R.id.item_bt3);
+            buttons[3] = itemView.findViewById(R.id.item_bt4);
         }
 
         @Override
         public void OnBindViewHolder(AbsFunction absFunction,int position) {
-            button.setText(absFunction.getShowName());
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    absFunction.doAction(null);
-                    textViewInfo.setText(absFunction.getShowInfo());
+            if(absFunction instanceof ButtonListFun){
+                ButtonListFun buttonListFun = (ButtonListFun) absFunction;
+                for (int i = 0;i< buttons.length;i++){
+                    if(i >= buttonListFun.buttonBaseList.size()){
+                        buttons[i].setVisibility(View.GONE);
+                    }else{
+                        ButtonListFun.ButtonBase buttonBase = buttonListFun.buttonBaseList.get(i);
+                        if(null == buttonBase){
+                            buttons[i].setVisibility(View.GONE);
+                            continue;
+                        }
+                        buttons[i].setText(buttonBase.getName());
+                        int finalI = i;
+                        buttons[i].setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                buttonBase.doAction();
+                                textViewInfo.setText(buttonListFun.getShowInfo());
+                            }
+                        });
+                    }
                 }
-            });
+            }
             textViewInfo.setText(absFunction.getShowInfo());
         }
 
     }
     private static class ViewHolderSwitch extends MYViewHolder {
-        TextView textViewInfo,textViewName;
-        Switch aSwitch;
+        TextView textViewInfo;
+        Switch[] switches = new Switch[2];
+        TextView[] textViewNames = new TextView[2];
         public ViewHolderSwitch(View itemView) {
             super(itemView);
-            textViewName = itemView.findViewById(R.id.item_tv_name);
             textViewInfo = itemView.findViewById(R.id.item_tv_info);
-            aSwitch = itemView.findViewById(R.id.item_sw);
+            textViewNames[0] = itemView.findViewById(R.id.item_tv_name1);
+            textViewNames[1] = itemView.findViewById(R.id.item_tv_name2);
+            switches[0] = itemView.findViewById(R.id.item_sw1);
+            switches[1] = itemView.findViewById(R.id.item_sw2);
         }
         public void OnBindViewHolder(AbsFunction absFunction,int position)
         {
-            textViewName.setText(absFunction.getShowName());
-            aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    absFunction.doAction(isChecked);
-                    textViewInfo.setText(absFunction.getShowInfo());
+            if(absFunction instanceof SwitchListFun){
+                SwitchListFun switchListFun = (SwitchListFun) absFunction;
+                for (int i = 0;i< switches.length;i++){
+                    if(i >= switchListFun.switchBaseList.size()){
+                        switches[i].setVisibility(View.GONE);
+                    }else{
+                        SwitchListFun.SwitchBase switchBase = switchListFun.switchBaseList.get(i);
+                        if(null == switchBase){
+                            switches[i].setVisibility(View.GONE);
+                            continue;
+                        }
+                        switches[i].setText(switchBase.getName());
+                        int finalI = i;
+                        textViewNames[i].setText(absFunction.getShowName());
+                        switches[i].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                switchBase.doAction(isChecked);
+                                textViewInfo.setText(switchListFun.getShowInfo());
+                            }
+                        });
+                    }
                 }
-            });
+            }
         }
     }
 }

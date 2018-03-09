@@ -107,8 +107,10 @@ public class THPlayer implements IThunderPlayerListener {
         }
         return selAudioIndex;
     }
+    float volume = 60;
     public void setVolume(float vol)
     {
+        volume = vol;
         ijkMediaPlayer.setVolume(vol/100,vol/100);
     }
     public void resume()
@@ -145,6 +147,7 @@ public class THPlayer implements IThunderPlayerListener {
         Log.d(TAG, "onPrepared: ");
         if(!iMediaPlayer.isPlaying()){
             iMediaPlayer.start();
+            setVolume(volume);
             MediaInfo mediaInfo = iMediaPlayer.getMediaInfo();
             Log.d(TAG, "onPrepared: mVideoDecoder " + getMediaInfo(mediaInfo));
         }

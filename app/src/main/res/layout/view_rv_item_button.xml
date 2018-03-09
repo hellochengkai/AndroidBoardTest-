@@ -14,18 +14,36 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <Button
-            android:id="@+id/item_bt"
-            android:textSize="30pt"
+            android:id="@+id/item_bt1"
+            android:textSize="20pt"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="75pt"
             />
-        <TextView
-            android:id="@+id/item_tv_info"
-            android:textSize="30pt"
+        <Button
+            android:id="@+id/item_bt2"
+            android:textSize="20pt"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="item"/>
+            android:layout_height="75pt"
+            />
+        <Button
+            android:id="@+id/item_bt3"
+            android:textSize="20pt"
+            android:layout_width="wrap_content"
+            android:layout_height="75pt"
+            />
+        <Button
+            android:id="@+id/item_bt4"
+            android:textSize="20pt"
+            android:layout_width="wrap_content"
+            android:layout_height="75pt"
+            />
     </LinearLayout>
+    <TextView
+        android:id="@+id/item_tv_info"
+        android:textSize="30pt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="item"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

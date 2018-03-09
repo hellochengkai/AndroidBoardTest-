@@ -13,14 +13,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.thunder.ktv.androidboardtest.function.EchoFun;
 import com.thunder.ktv.androidboardtest.function.EditorFun;
 import com.thunder.ktv.androidboardtest.function.FrontPanelFun;
-import com.thunder.ktv.androidboardtest.function.GpioFun;
+import com.thunder.ktv.androidboardtest.function.GpioSetFun;
+import com.thunder.ktv.androidboardtest.function.MusicLevelFun;
 import com.thunder.ktv.androidboardtest.function.PlayerVolumeFun;
+import com.thunder.ktv.androidboardtest.function.RolandEffectFun;
+import com.thunder.ktv.androidboardtest.function.VersionFun;
 import com.thunder.ktv.androidboardtest.player.THPlayer;
-import com.thunder.ktv.androidboardtest.function.AbsFunction;
-import com.thunder.ktv.androidboardtest.function.ButtonFun;
-import com.thunder.ktv.androidboardtest.function.RolandPrmFun;
+import com.thunder.ktv.androidboardtest.function.basefun.AbsFunction;
 import com.thunder.ktv.androidboardtest.player.listener.IThunderPlayerListener;
 import com.thunder.ktv.androidboardtest.view.MyListViewAdapter;
 import com.thunder.ktv.thunderjni.manager.LibsManager;
@@ -45,7 +47,10 @@ public class MainActivity extends AppCompatActivity {
             "/sdcard/video/7.ts",
             "/sdcard/video/8.ts",
             "/sdcard/video/9.ts",
-            "/sdcard/video/10.ts"
+            "/sdcard/video/10.ts",
+            "/sdcard/video/11.ts",
+            "/sdcard/video/12.ts",
+            "/sdcard/video/13.ts"
     };
 
     private int curPlayIndex = 0;
@@ -150,56 +155,26 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.bt_audio_select).setOnClickListener(onClickListener);
         findViewById(R.id.bt_video_select).setOnClickListener(onClickListener);
     }
+    FrontPanelFun frontPanelFun = null;
     void initData(){
+        frontPanelFun = new FrontPanelFun("前面版控制开关");
         list = new ArrayList<>();
         byte[] bytes = new byte[2];
-
-        list.add(new FrontPanelFun("前面版控制开关"));
-        bytes[0] = (byte) 0xbf;bytes[1] = (byte) 0x00;
-        list.add(new ButtonFun("版本号 Version Request",bytes));
-
-        bytes[0] = (byte) 0xbf;bytes[1] = (byte) 0x04;
-        list.add(new ButtonFun("内部版本号 Build No Request",bytes));
-
-        list.add(new GpioFun("GPIO 2-3",2*8+3));
-
-        list.add(new GpioFun("GPIO 2-4",2*8+4));
-
-        list.add(new RolandPrmFun("效果1","/sdcard/roland/01.prm"));
-        list.add(new RolandPrmFun("效果2","/sdcard/roland/02.prm"));
-        list.add(new RolandPrmFun("效果3","/sdcard/roland/03.prm"));
-        list.add(new RolandPrmFun("效果4","/sdcard/roland/04.prm"));
-
+        list.add(new VersionFun());
+        list.add(new GpioSetFun());
+        list.add(new RolandEffectFun());
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x03;
         list.add(new PlayerVolumeFun("视频播放器音量"));
-
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x03;
-        list.add(new EditorFun(EditorFun.TYPE_MIC,"麦克风主音量 MIC Master",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
-
+        list.add(new EditorFun(EditorFun.TYPE_MIC,"麦克风主音量 MIC Master",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x4d));
         bytes[0] = (byte) 0xb3;bytes[1] = (byte) 0x02;
         list.add(new EditorFun(EditorFun.TYPE_UNKNOW,"音乐变调 Key Control Pitch",bytes,(byte) 0x34,(byte) 0x4c, (byte) 0x40));
-
-        bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x41;
-        list.add(new EditorFun(EditorFun.TYPE_MUSIC,"外放音乐音量 Speaker MUSIC Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
-        bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x07;
-        list.add(new EditorFun(EditorFun.TYPE_MUSIC,"耳机音乐音量 Headphone MUSIC Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
-
-        bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x42;
-        list.add(new EditorFun(EditorFun.TYPE_ECHO_DELAY,"外放延时 Speaker MIC Delay Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
-        bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x43;
-        list.add(new EditorFun(EditorFun.TYPE_ECHO_DELAY,"外放混响 Speaker MIC Reverb Leve",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
-
-        bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x1d;
-        list.add(new EditorFun(EditorFun.TYPE_ECHO_DELAY,"耳机延时 Headphone MIC Delay Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
-        bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x1e;
-        list.add(new EditorFun(EditorFun.TYPE_ECHO_DELAY,"耳机混响 Headphone MIC Reverb Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x7f));
-
+        list.add(new MusicLevelFun(EditorFun.TYPE_MUSIC,"音乐音量",null,(byte) 0x00,(byte) 0x7f, (byte) 0x4d));
+        list.add(new EchoFun(EditorFun.TYPE_ECHO_DELAY,"混响",null,(byte) 0x00,(byte) 0x7f, (byte) 0x61));
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x0c;
         list.add(new EditorFun(EditorFun.TYPE_UNKNOW,"AUX到音乐 AUX to MUSIC Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x00));
-
         bytes[0] = (byte) 0xb1;bytes[1] = (byte) 0x75;
         list.add(new EditorFun(EditorFun.TYPE_UNKNOW,"麦克风反馈抑制 移频量 Feedback Control Freq",bytes,(byte) 0x36,(byte) 0x4a, (byte) 0x40));
-
         thPlayer = new THPlayer(new IThunderPlayerListener() {
             @Override
             public void onCompletion(IMediaPlayer iMediaPlayer) {
