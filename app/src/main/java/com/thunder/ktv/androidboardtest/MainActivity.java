@@ -50,7 +50,8 @@ public class MainActivity extends AppCompatActivity {
             "/sdcard/video/10.ts",
             "/sdcard/video/11.ts",
             "/sdcard/video/12.ts",
-            "/sdcard/video/13.ts"
+            "/sdcard/video/13.ts",
+            "/sdcard/video/14.ts"
     };
 
     private int curPlayIndex = 0;
