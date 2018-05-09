@@ -8,17 +8,11 @@ import com.thunder.ktv.androidboardtest.function.basefun.SeekFun;
 
 public class EditorFun extends SeekFun {
 
-    public final static int TYPE_UNKNOW = -1;
-//    public final static int TYPE_DELAY = 0;
-    public final static int TYPE_ECHO_DELAY = 1;
-    public final static int TYPE_MIC = 2;
-    public final static int TYPE_MUSIC = 3;
-    public int codeType = TYPE_UNKNOW;
+
     byte offsetCode = 0;
-    public EditorFun(int codeType,String showName, byte[] command, byte minCode, byte maxCode, byte defCode) {
-        super(showName, command,(byte) (maxCode - minCode), (byte) (defCode - minCode));
+    public EditorFun(int funType,String showName, byte[] command, byte minCode, byte maxCode, byte defCode) {
+        super(funType,showName, command,(byte) (maxCode - minCode), (byte) (defCode - minCode));
         offsetCode = minCode;
-        this.codeType = codeType;
         if(command != null){
             this.command[this.command.length - 1] = defCode;
         }

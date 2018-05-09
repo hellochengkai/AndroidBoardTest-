@@ -12,6 +12,18 @@ abstract public class AbsFunction {
     protected static final String  UART_DEV = "/dev/ttyAMA0";
     protected static final int UART_RATE = 38400;
 
+    public final static int FUN_TYPE_DEF = -1;
+    //    public final static int TYPE_DELAY = 0;
+    public final static int FUN_TYPE_ECHO_DELAY = 1;
+    public final static int FUN_TYPE_KTV_BT_LINE = 2;
+    public final static int FUN_TYPE_PLAYER_VOLUME = 3;
+    public final static int FUN_TYPE_MIC = 4;
+    public final static int FUN_TYPE_MUSIC = 5;
+    public final static int FUN_TYPE_ROLANDEFFECT = 6;
+
+
+    public int funType = FUN_TYPE_DEF;
+
     public int showType = 0;
     public boolean writeCode(byte[] code) {
         if(code == null){
@@ -42,7 +54,8 @@ abstract public class AbsFunction {
 
     abstract public boolean doAction(Object o);
 
-    public AbsFunction(int showType,String showName, byte[] command) {
+    public AbsFunction(int funType,int showType,String showName, byte[] command) {
+        this.funType = funType;
         this.showType = showType;
         this.showName = showName;
         if(command != null){
@@ -51,7 +64,7 @@ abstract public class AbsFunction {
         }
     }
 
-    protected String byteCode2String(byte[] code,int len)
+    protected static String byteCode2String(byte[] code,int len)
     {
         String codeStr = new String();
         if(code == null || len == 0 || code.length < len){

@@ -11,8 +11,8 @@ abstract public class SeekFun extends AbsFunction {
     public byte def = 0;
     public int cur;
     public byte max = 100;
-    public SeekFun(String showName, byte[] command,byte max, byte def) {
-        super(MyListViewAdapter.ItemViewTypeSeekBar,showName,command);
+    public SeekFun(int funType,String showName, byte[] command,byte max, byte def) {
+        super(funType,MyListViewAdapter.ItemViewTypeSeekBar,showName,command);
         this.def = def;
         this.cur = def;
         this.max = max;

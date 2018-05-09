@@ -8,8 +8,8 @@ import com.thunder.ktv.androidboardtest.function.basefun.SeekFun;
  */
 
 public class PlayerVolumeFun extends SeekFun {
-    public PlayerVolumeFun(String showName) {
-        super(showName, null,(byte) 100,(byte) 60);
+    public PlayerVolumeFun() {
+        super(FUN_TYPE_PLAYER_VOLUME,"视频播放器音量", null,(byte) 100,(byte) 60);
     }
     @Override
     public boolean doAction(Object o) {

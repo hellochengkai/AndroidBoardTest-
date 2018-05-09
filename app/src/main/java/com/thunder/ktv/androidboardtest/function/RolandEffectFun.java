@@ -11,9 +11,9 @@ import java.util.List;
 
 public class RolandEffectFun extends ButtonListFun {
     private String msg = null;
+    List list = new ArrayList();
     public RolandEffectFun() {
-        super("效果");
-        List list = new ArrayList();
+        super(FUN_TYPE_ROLANDEFFECT,"效果");
         List list1 = new ArrayList();
         list1.add(new RolandPrmFun("默认效果","/sdcard/roland/02.prm"));
         list1.add(new RolandPrmFun("效果1","/sdcard/roland/01.prm"));
@@ -33,6 +33,11 @@ public class RolandEffectFun extends ButtonListFun {
                 @Override
                 public String getName() {
                     return rolandPrmFun.getShowName();
+                }
+
+                @Override
+                public int getCode() {
+                    return finalI + 1;
                 }
             } );
         }

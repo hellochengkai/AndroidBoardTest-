@@ -17,6 +17,7 @@ import com.thunder.ktv.androidboardtest.function.EchoFun;
 import com.thunder.ktv.androidboardtest.function.EditorFun;
 import com.thunder.ktv.androidboardtest.function.FrontPanelFun;
 import com.thunder.ktv.androidboardtest.function.GpioSetFun;
+import com.thunder.ktv.androidboardtest.function.KtvBtLineFun;
 import com.thunder.ktv.androidboardtest.function.MusicLevelFun;
 import com.thunder.ktv.androidboardtest.function.PlayerVolumeFun;
 import com.thunder.ktv.androidboardtest.function.RolandEffectFun;
@@ -162,20 +163,27 @@ public class MainActivity extends AppCompatActivity {
         list = new ArrayList<>();
         byte[] bytes = new byte[2];
         list.add(new VersionFun());
-        list.add(new GpioSetFun());
+//        list.add(new GpioSetFun());
+        list.add(new KtvBtLineFun());
         list.add(new RolandEffectFun());
+        list.add(new PlayerVolumeFun());
+
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x03;
-        list.add(new PlayerVolumeFun("视频播放器音量"));
-        bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x03;
-        list.add(new EditorFun(EditorFun.TYPE_MIC,"麦克风主音量 MIC Master",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x4d));
+        list.add(new EditorFun(AbsFunction.FUN_TYPE_MIC,"麦克风主音量 MIC Master",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x4d));
+
         bytes[0] = (byte) 0xb3;bytes[1] = (byte) 0x02;
-        list.add(new EditorFun(EditorFun.TYPE_UNKNOW,"音乐变调 Key Control Pitch",bytes,(byte) 0x34,(byte) 0x4c, (byte) 0x40));
-        list.add(new MusicLevelFun(EditorFun.TYPE_MUSIC,"音乐音量",null,(byte) 0x00,(byte) 0x7f, (byte) 0x4d));
-        list.add(new EchoFun(EditorFun.TYPE_ECHO_DELAY,"混响",null,(byte) 0x00,(byte) 0x7f, (byte) 0x61));
+        list.add(new EditorFun(AbsFunction.FUN_TYPE_DEF,"音乐变调 Key Control Pitch",bytes,(byte) 0x34,(byte) 0x4c, (byte) 0x40));
+
+        list.add(new MusicLevelFun());
+
+        list.add(new EchoFun());
+
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x0c;
-        list.add(new EditorFun(EditorFun.TYPE_UNKNOW,"AUX到音乐 AUX to MUSIC Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x00));
+        list.add(new EditorFun(AbsFunction.FUN_TYPE_DEF,"AUX到音乐 AUX to MUSIC Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x00));
+
         bytes[0] = (byte) 0xb1;bytes[1] = (byte) 0x75;
-        list.add(new EditorFun(EditorFun.TYPE_UNKNOW,"麦克风反馈抑制 移频量 Feedback Control Freq",bytes,(byte) 0x36,(byte) 0x4a, (byte) 0x40));
+        list.add(new EditorFun(AbsFunction.FUN_TYPE_DEF,"麦克风反馈抑制 移频量 Feedback Control Freq",bytes,(byte) 0x36,(byte) 0x4a, (byte) 0x40));
+
         thPlayer = new THPlayer(new IThunderPlayerListener() {
             @Override
             public void onCompletion(IMediaPlayer iMediaPlayer) {

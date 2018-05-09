@@ -15,7 +15,7 @@ public class GpioSetFun extends SwitchListFun {
 
     String msg = new String();
     public GpioSetFun() {
-        super("GPIO设置");
+        super(FUN_TYPE_DEF,"GPIO设置");
         List<SwitchBase> list = new ArrayList<>();
         list.add(new SwitchBase() {
             @Override

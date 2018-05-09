@@ -12,24 +12,24 @@ public class EchoFun extends EditorFun{
     byte[] bytes = null;
     List list = null;
 
-    void initData(int codeTypem,int defCode)
+    void initData(int defCode)
     {
         list = new ArrayList();
         bytes = new byte[2];
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x42;
-        list.add(new EditorFun(codeType,"外放延时 Speaker MIC Delay Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) defCode));
+        list.add(new EditorFun(FUN_TYPE_DEF,"外放延时 Speaker MIC Delay Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) defCode));
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x43;
-        list.add(new EditorFun(codeType,"外放混响 Speaker MIC Reverb Leve",bytes,(byte) 0x00,(byte) 0x7f, (byte) defCode));
+        list.add(new EditorFun(FUN_TYPE_DEF,"外放混响 Speaker MIC Reverb Leve",bytes,(byte) 0x00,(byte) 0x7f, (byte) defCode));
 
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x1d;
-        list.add(new EditorFun(codeType,"耳机延时 Headphone MIC Delay Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) defCode));
+        list.add(new EditorFun(FUN_TYPE_DEF,"耳机延时 Headphone MIC Delay Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) defCode));
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x1e;
-        list.add(new EditorFun(codeType,"耳机混响 Headphone MIC Reverb Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) defCode));
+        list.add(new EditorFun(FUN_TYPE_DEF,"耳机混响 Headphone MIC Reverb Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) defCode));
 
     }
-    public EchoFun(int codeType,String showName, byte[] command,byte minCode, byte maxCode, byte defCode) {
-        super(codeType,showName, command,minCode, maxCode,defCode);
-        initData(codeType,defCode);
+    public EchoFun() {
+        super(FUN_TYPE_ECHO_DELAY,"混响", null,(byte) 0x00,(byte) 0x7f, (byte) 0x61);
+        initData(0x61);
     }
 
     @Override

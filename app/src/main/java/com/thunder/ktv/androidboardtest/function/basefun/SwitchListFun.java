@@ -19,8 +19,8 @@ public class SwitchListFun extends AbsFunction{
         this.switchBaseList = switchBaseList;
     }
 
-    public SwitchListFun(String showName) {
-        super(MyListViewAdapter.ItemViewTypeSwitch, showName, null);
+    public SwitchListFun(int funType,String showName) {
+        super(funType,MyListViewAdapter.ItemViewTypeSwitch, showName, null);
     }
 
     @Override

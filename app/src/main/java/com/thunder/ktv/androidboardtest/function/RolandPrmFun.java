@@ -24,7 +24,7 @@ public class RolandPrmFun extends AbsFunction {
 
     List<byte[]> codeList = null;
     public RolandPrmFun(String showName,String path) {
-        super(MyListViewAdapter.ItemViewTypeButton,showName, null);
+        super(FUN_TYPE_DEF,MyListViewAdapter.ItemViewTypeButton,showName, null);
         codeList = new ArrayList<>();
         new Thread(new Runnable() {
             @Override
@@ -102,7 +102,11 @@ public class RolandPrmFun extends AbsFunction {
                 }
             }
         }
-        AppHelper.showMsg( showName + " 写入完毕("+writeCodeNum+")!!!");
+        if(writeCodeNum == 0){
+            AppHelper.showMsg( showName + " 当前已经是"+showName+",无需切换!!!");
+        }else{
+            AppHelper.showMsg( showName + " 写入完毕("+writeCodeNum+")!!!");
+        }
         TDHardwareHelper.nativeCloseUart(fd);
         return false;
     }

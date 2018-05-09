@@ -49,7 +49,7 @@ public class VersionFun extends ButtonListFun {
 
 
     public VersionFun() {
-        super("版本号");
+        super(FUN_TYPE_DEF,"版本号");
         List list = new ArrayList();
         list.add(new ButtonBase() {
             @Override
@@ -62,6 +62,11 @@ public class VersionFun extends ButtonListFun {
             public String getName() {
                 return "版本号 Version Request";
             }
+
+            @Override
+            public int getCode() {
+                return 0;
+            }
         });
         list.add(new ButtonBase() {
             @Override
@@ -73,6 +78,11 @@ public class VersionFun extends ButtonListFun {
             @Override
             public String getName() {
                 return "内部版本号 Build No Request";
+            }
+
+            @Override
+            public int getCode() {
+                return 0;
             }
         });
         setButtonBaseList(list);

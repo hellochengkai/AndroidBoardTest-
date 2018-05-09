@@ -12,19 +12,19 @@ public class MusicLevelFun extends EditorFun {
     byte[] bytes = null;
     List list = null;
 
-    void initData(int codeType,int defCode)
+    void initData(int defCode)
     {
         list = new ArrayList();
         bytes = new byte[2];
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x41;
-        list.add(new EditorFun(codeType,"外放音乐音量 Speaker MUSIC Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) defCode));
+        list.add(new EditorFun(FUN_TYPE_DEF,"外放音乐音量 Speaker MUSIC Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) defCode));
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x07;
-        list.add(new EditorFun(codeType,"耳机音乐音量 Headphone MUSIC Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) defCode));
+        list.add(new EditorFun(FUN_TYPE_DEF,"耳机音乐音量 Headphone MUSIC Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) defCode));
 
     }
-    public MusicLevelFun(int codeType,String showName, byte[] command,byte minCode, byte maxCode, byte defCode) {
-        super(codeType,showName, command,minCode, maxCode,defCode);
-        initData(codeType,defCode);
+    public MusicLevelFun() {
+        super(FUN_TYPE_MUSIC,"音乐音量", null,(byte) 0x00,(byte) 0x7f, (byte) 0x4d);
+        initData(0x4d);
     }
 
     @Override

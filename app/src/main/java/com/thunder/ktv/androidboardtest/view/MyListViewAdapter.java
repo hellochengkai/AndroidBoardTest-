@@ -169,11 +169,12 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
     private static class ViewHolderButton extends MYViewHolder {
-        TextView textViewInfo;
+        TextView textViewInfo,textViewName;
         Button[] buttons = new Button[4];
         public ViewHolderButton(View itemView) {
             super(itemView);
             textViewInfo = itemView.findViewById(R.id.item_tv_info);
+            textViewName = itemView.findViewById(R.id.item_tv_name);
             buttons[0] = itemView.findViewById(R.id.item_bt1);
             buttons[1] = itemView.findViewById(R.id.item_bt2);
             buttons[2] = itemView.findViewById(R.id.item_bt3);
@@ -182,6 +183,8 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         @Override
         public void OnBindViewHolder(AbsFunction absFunction,int position) {
+            textViewName.setText(absFunction.getShowName());
+            textViewName.setVisibility(View.GONE);
             if(absFunction instanceof ButtonListFun){
                 ButtonListFun buttonListFun = (ButtonListFun) absFunction;
                 for (int i = 0;i< buttons.length;i++){
