@@ -18,6 +18,11 @@ abstract public class SeekFun extends AbsFunction {
         this.max = max;
     }
     int setup = 10;
+
+    public void setSetup(int setup) {
+        this.setup = setup;
+    }
+
     public void up()
     {
         cur+=setup;

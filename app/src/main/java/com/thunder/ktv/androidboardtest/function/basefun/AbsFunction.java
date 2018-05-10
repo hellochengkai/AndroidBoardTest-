@@ -3,13 +3,16 @@ package com.thunder.ktv.androidboardtest.function.basefun;
 import com.thunder.ktv.androidboardtest.AppHelper;
 import com.thunder.ktv.thunderjni.thunderapi.TDHardwareHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by chengkai on 18-2-13.
  */
 
 abstract public class AbsFunction {
     private static final String TAG = "AbsFunction";
-    protected static final String  UART_DEV = "/dev/ttyAMA0";
+    private static final String  UART_DEV = "/dev/ttyAMA0";
     protected static final int UART_RATE = 38400;
 
     public final static int FUN_TYPE_DEF = -1;
@@ -20,28 +23,60 @@ abstract public class AbsFunction {
     public final static int FUN_TYPE_MIC = 4;
     public final static int FUN_TYPE_MUSIC = 5;
     public final static int FUN_TYPE_ROLANDEFFECT = 6;
-
+    public final static int FUN_TYPE_VIDEO_CONTROL = 7;
+    public final static int FUN_TYPE_MAST_VOLUMER = 8;
+    public final static int FUN_TYPE_Bass = 9;
 
     public int funType = FUN_TYPE_DEF;
-
     public int showType = 0;
-    public boolean writeCode(byte[] code) {
-        if(code == null){
-            return false;
+    private static int fd = 0;
+    {
+        openDev();
+    }
+
+    public synchronized static int readCode(byte[] byteread,int len)
+    {
+        int readlen = TDHardwareHelper.nativeReadUart(fd,byteread,len);
+        if(readlen > 0){
+            AppHelper.showMsg(UART_DEV + " [Rx]:" + byteCode2String(byteread,readlen));
+            return readlen;
+        }else{
+            AppHelper.showMsg(UART_DEV + " [Rx error]");
+            return readlen;
         }
-        int fd = TDHardwareHelper.nativeOpenUart(UART_DEV.getBytes(),UART_RATE);
-        if(fd < 0){
-            AppHelper.showMsg(String.format("串口%s %d 打开失败",UART_DEV,UART_RATE));
+    }
+    public synchronized static boolean writeCodeNoMsg(byte[] code) {
+        if(code == null){
             return false;
         }
         int writeLen = TDHardwareHelper.nativeWriteUart(fd, code, code.length);
         if(writeLen != code.length){
-            AppHelper.showMsg("[Tx error]:" + byteCode2String(code));
+            return false;
         }else{
-            AppHelper.showMsg("[Tx]:" + byteCode2String(code));
+            return true;
         }
+    }
+    public synchronized static boolean writeCode(byte[] code) {
+        if(code == null){
+            return false;
+        }
+        int writeLen = TDHardwareHelper.nativeWriteUart(fd, code, code.length);
+        if(writeLen != code.length){
+            AppHelper.showMsg(UART_DEV + " [Tx error]:" + byteCode2String(code));
+            return false;
+        }else{
+            AppHelper.showMsg(UART_DEV + " [Tx]:" + byteCode2String(code));
+            return true;
+        }
+    }
+    public static void openDev() {
+        fd = TDHardwareHelper.nativeOpenUart(UART_DEV.getBytes(),UART_RATE);
+        if(fd < 0){
+            AppHelper.showMsg(String.format("串口%s %d 打开失败",UART_DEV,UART_RATE));
+        }
+    }
+    public void closeDev(int fd) {
         TDHardwareHelper.nativeCloseUart(fd);
-        return false;
     }
 
     public String getShowInfo() {
@@ -75,7 +110,7 @@ abstract public class AbsFunction {
         }
         return codeStr;
     }
-    public String byteCode2String(byte[] code)
+    public static String byteCode2String(byte[] code)
     {
         String codeStr = new String();
         if(code == null || code.length == 0){

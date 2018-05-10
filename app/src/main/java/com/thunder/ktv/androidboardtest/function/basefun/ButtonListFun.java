@@ -35,7 +35,6 @@ public class ButtonListFun extends AbsFunction {
             ButtonBase buttonBase = (ButtonBase) iterator.next();
             if(buttonBase.getCode() == (int)o){
                 buttonBase.doAction();
-                return true;
             }
         }
         return false;

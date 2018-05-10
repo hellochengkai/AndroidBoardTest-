@@ -20,30 +20,15 @@ public class VersionFun extends ButtonListFun {
         if(command == null){
             return false;
         }
-        int fd,readlen;
         boolean ret = false;
-        fd = TDHardwareHelper.nativeOpenUart(UART_DEV.getBytes(),UART_RATE);
-        if(fd <= 0){
-            AppHelper.showMsg(String.format("串口%s %d 打开失败",UART_DEV,UART_RATE));
-            return ret;
+        int readlen;
+        if(writeCode(command)){
+            readlen = readCode(byteread,byteread.length);
+            if(readlen > 0){
+                ret = true;
+                msg = name + ":" + "{Rx}:" + byteCode2String(byteread,readlen);
+            }
         }
-        AppHelper.showMsg("[Tx]:" + byteCode2String(command));
-        int writeLen = TDHardwareHelper.nativeWriteUart(fd, command,command.length);
-        if(writeLen != command.length){
-            AppHelper.showMsg("串口寫入失敗！！" + byteCode2String(command));
-        }else{
-            AppHelper.showMsg("串口寫入成功！！" + byteCode2String(command));
-        }
-        readlen = TDHardwareHelper.nativeReadUart(fd,byteread,byteread.length);
-        if(readlen > 0){
-            AppHelper.showMsg("{Rx}:" + byteCode2String(byteread,readlen));
-            msg = name + ":" + "{Rx}:" + byteCode2String(byteread,readlen);
-        }else{
-            AppHelper.showMsg("{Rx}:读取失败");
-            msg = name + ":" + "{Rx}:读取失败";
-        }
-        TDHardwareHelper.nativeCloseUart(fd);
-        ret = true;
         return ret;
     }
 

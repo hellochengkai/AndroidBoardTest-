@@ -82,11 +82,6 @@ public class RolandPrmFun extends AbsFunction {
             return false;
         }
         writeCodeNum = 0;
-        int fd = TDHardwareHelper.nativeOpenUart(UART_DEV.getBytes(),UART_RATE);
-        if(fd < 0){
-            AppHelper.showMsg(String.format("串口%s %d 打开失败",UART_DEV,UART_RATE));
-            return false;
-        }
         Log.d(TAG, "doAction: head " + new String(head));
         Iterator iterator = codeList.iterator();
         while (iterator.hasNext()){
@@ -94,12 +89,7 @@ public class RolandPrmFun extends AbsFunction {
             short key = (short) ((code[0] << 8) + code[1]);
             if(RolandCodeManage.addCode(key,code[2])) {
                 writeCodeNum++;
-                int writeLen = TDHardwareHelper.nativeWriteUart(fd, code, code.length);
-                if(writeLen != code.length){
-                    AppHelper.showMsg("[Tx error]:" + byteCode2String(code));
-                }else{
-//                    AppHelper.showMsg("[Tx]:" + byteCode2String(code));
-                }
+                writeCodeNoMsg(code);
             }
         }
         if(writeCodeNum == 0){
@@ -107,7 +97,6 @@ public class RolandPrmFun extends AbsFunction {
         }else{
             AppHelper.showMsg( showName + " 写入完毕("+writeCodeNum+")!!!");
         }
-        TDHardwareHelper.nativeCloseUart(fd);
         return false;
     }
 

@@ -13,15 +13,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.thunder.ktv.androidboardtest.function.BassFun;
 import com.thunder.ktv.androidboardtest.function.EchoFun;
 import com.thunder.ktv.androidboardtest.function.EditorFun;
 import com.thunder.ktv.androidboardtest.function.FrontPanelFun;
-import com.thunder.ktv.androidboardtest.function.GpioSetFun;
 import com.thunder.ktv.androidboardtest.function.KtvBtLineFun;
+import com.thunder.ktv.androidboardtest.function.MastVolumer;
 import com.thunder.ktv.androidboardtest.function.MusicLevelFun;
 import com.thunder.ktv.androidboardtest.function.PlayerVolumeFun;
 import com.thunder.ktv.androidboardtest.function.RolandEffectFun;
 import com.thunder.ktv.androidboardtest.function.VersionFun;
+import com.thunder.ktv.androidboardtest.function.VideoControlFun;
 import com.thunder.ktv.androidboardtest.player.THPlayer;
 import com.thunder.ktv.androidboardtest.function.basefun.AbsFunction;
 import com.thunder.ktv.androidboardtest.player.listener.IThunderPlayerListener;
@@ -69,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         AppHelper.setUpdataMsg(new AppHelper.UpdataMsg() {
             @Override
             public void updataMsg(String msg) {
-                Log.d(TAG, "onCreate: updataMsg " + msg);
+//                Log.d(TAG, "onCreate: updataMsg " + msg);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -164,8 +166,12 @@ public class MainActivity extends AppCompatActivity {
         byte[] bytes = new byte[2];
         list.add(new VersionFun());
 //        list.add(new GpioSetFun());
+        list.add(new VideoControlFun());
         list.add(new KtvBtLineFun());
         list.add(new RolandEffectFun());
+
+        list.add(new BassFun());
+        list.add(new MastVolumer());
         list.add(new PlayerVolumeFun());
 
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x03;
