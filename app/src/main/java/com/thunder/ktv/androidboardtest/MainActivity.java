@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
 //        systemControlClientHelper.initServer(getApplicationContext());
         initData();
         initview();
+        PT2033Helper.getInstance();
     }
     List<AbsFunction> list = null;
     MyListViewAdapter mAdapter = null;

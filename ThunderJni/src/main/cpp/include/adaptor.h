@@ -383,7 +383,14 @@ int Mid_ScreenCast_Stop();
  */
 int Mid_Output_Deinit();
 int Mid_SYS_Deinit();
-int Mid_SetGPIO(int gpio,int vol);
+int Mid_SetGPIO(int gpio,int value);
+int Mid_InitI2C1();
+int Mid_I2CWrite(char u8DevAddress, int u32RegAddr,
+                        int u32RegAddrCount, char * pu8Buf, int u32Length );
+
+int Mid_I2CRead(char u8DevAddress, int u32RegAddr,
+                       int u32RegAddrCount, char *pu8Buf, int u32Length);
+int Mid_DeInitI2C1();
 #endif //__ADAPTOR_H__
 
 

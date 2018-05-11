@@ -59,7 +59,7 @@ public class KtvBtLineFun extends ButtonListFun {
                             doLine();break;
                         }
                     }
-                    AppHelper.showMsg( getName() + ":切换效果" + getName());
+                    AppHelper.showMsg( getName() + ":切换成功");
                     return true;
                 }
                 @Override

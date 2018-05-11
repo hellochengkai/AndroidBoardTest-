@@ -201,6 +201,44 @@ JNIEXPORT jint JNICALL Java_com_thunder_ktv_thunderjni_thunderapi_TDHardwareHelp
     return Mid_SetGPIO(gpio,vol);
 }
 
+JNIEXPORT void JNICALL Java_com_thunder_ktv_thunderjni_thunderapi_TDHardwareHelper_nativeI2C1Init(JNIEnv *env, jclass jclazz)
+{
+    Mid_InitI2C1();
+}
+JNIEXPORT void JNICALL Java_com_thunder_ktv_thunderjni_thunderapi_TDHardwareHelper_nativeI2C1DeInit(JNIEnv *env, jclass jclazz)
+{
+    Mid_DeInitI2C1();
+}
+
+JNIEXPORT jint JNICALL Java_com_thunder_ktv_thunderjni_thunderapi_TDHardwareHelper_nativeI2C1Write
+        (JNIEnv *env, jclass jclazz,jbyte DevAddress,int RegAddr,int RegAddrCount,jbyteArray bytes,int len)
+{
+    char * cbuf = 0;
+    cbuf = (char *)env->GetByteArrayElements(bytes, NULL);
+    int ret =  Mid_I2CWrite((char)DevAddress,RegAddr,RegAddrCount,cbuf,len);
+    env->ReleaseByteArrayElements(bytes, (jbyte *) cbuf, 0);
+    LOGD("PT2033Helper Mid_I2CWrite cbuf == %d 0x%x",cbuf,ret);
+    return ret;
+}
+JNIEXPORT jint JNICALL Java_com_thunder_ktv_thunderjni_thunderapi_TDHardwareHelper_nativeI2C1WriteOneByte
+        (JNIEnv *env, jclass jclazz,jbyte DevAddress,int RegAddr,int RegAddrCount,jbyte bytes)
+{
+    int ret =  Mid_I2CWrite((char)DevAddress, RegAddr, RegAddrCount, (char *) &bytes, 1);
+    LOGD("PT2033Helper Mid_I2CWrite cbuf == %d 0x%x",bytes,ret);
+    return ret;
+}
+
+JNIEXPORT jint JNICALL Java_com_thunder_ktv_thunderjni_thunderapi_TDHardwareHelper_nativeI2C1Read
+        (JNIEnv *env, jclass jclazz,jbyte DevAddress,int RegAddr,int RegAddrCount,jbyteArray bytes,int len)
+{
+    char * cbuf = 0;
+    cbuf = (char *)env->GetByteArrayElements(bytes, NULL);
+    int ret = Mid_I2CRead((char)DevAddress,RegAddr,RegAddrCount,cbuf,len);
+    LOGD("PT2033Helper Mid_I2CRead cbuf == %d 0x%x",cbuf,ret);
+    env->ReleaseByteArrayElements(bytes, (jbyte *) cbuf, 0);
+    return ret;
+}
+
 #ifdef __cplusplus
 }
 #endif
