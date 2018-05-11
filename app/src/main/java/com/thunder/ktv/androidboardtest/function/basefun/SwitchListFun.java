@@ -1,7 +1,9 @@
 package com.thunder.ktv.androidboardtest.function.basefun;
 
+import com.thunder.ktv.androidboardtest.function.FrontPanelFun;
 import com.thunder.ktv.androidboardtest.view.MyListViewAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,22 +11,19 @@ import java.util.List;
  */
 
 public class SwitchListFun extends AbsFunction{
-    public interface SwitchBase{
-        boolean doAction(boolean is);
-        String getName();
-    }
-    public List<SwitchBase> switchBaseList  = null;
 
-    public void setSwitchBaseList(List<SwitchBase> switchBaseList) {
-        this.switchBaseList = switchBaseList;
+    public abstract class SwitchBase implements IFrontPanelDoAction {
+        public boolean isChecked = false;
+        public abstract String getName();
     }
-
+    public List<IFrontPanelDoAction> switchBaseList  = null;
     public SwitchListFun(int funType,String showName) {
         super(funType,MyListViewAdapter.ItemViewTypeSwitch, showName, null);
+        switchBaseList = new ArrayList<>();
     }
 
     @Override
     public boolean doAction(Object o) {
-        return false;
+        return FrontPanelFun.doActionByFrontCodeButtonList(switchBaseList, (byte[]) o);
     }
 }

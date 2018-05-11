@@ -1,7 +1,10 @@
 package com.thunder.ktv.androidboardtest.function.basefun;
 
+import com.thunder.ktv.androidboardtest.function.FrontPanelFun;
 import com.thunder.ktv.androidboardtest.view.MyListViewAdapter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -11,32 +14,21 @@ import java.util.List;
 
 public class ButtonListFun extends AbsFunction {
 
-    public List<ButtonBase> buttonBaseList = null;
-    public interface ButtonBase{
-        boolean doAction();
-        String getName();
-        int getCode();
-    }
-
-    public void setButtonBaseList(List<ButtonBase> buttonBaseList) {
-        this.buttonBaseList = buttonBaseList;
+    public List<IFrontPanelDoAction> buttonBaseList = null;
+    public abstract class ButtonBase implements IFrontPanelDoAction {
+        public String name = null;
+        public ButtonBase(String name) {
+            this.name = name;
+        }
     }
 
     public ButtonListFun(int funType,String showName) {
         super(funType,MyListViewAdapter.ItemViewTypeButton, showName, null);
+        buttonBaseList = new ArrayList<>();
     }
 
     @Override
     public boolean doAction(Object o) {
-        if(buttonBaseList == null)
-            return false;
-        Iterator iterator = buttonBaseList.iterator();
-        while (iterator.hasNext()){
-            ButtonBase buttonBase = (ButtonBase) iterator.next();
-            if(buttonBase.getCode() == (int)o){
-                buttonBase.doAction();
-            }
-        }
-        return false;
+        return FrontPanelFun.doActionByFrontCodeButtonList(buttonBaseList, (byte[]) o);
     }
 }

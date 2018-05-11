@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -13,7 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.thunder.ktv.androidboardtest.function.BassFun;
+import com.thunder.ktv.androidboardtest.function.BassSeekFun;
+import com.thunder.ktv.androidboardtest.function.BassSwitchFun;
 import com.thunder.ktv.androidboardtest.function.EchoFun;
 import com.thunder.ktv.androidboardtest.function.EditorFun;
 import com.thunder.ktv.androidboardtest.function.FrontPanelFun;
@@ -22,6 +22,7 @@ import com.thunder.ktv.androidboardtest.function.MastVolumer;
 import com.thunder.ktv.androidboardtest.function.MusicLevelFun;
 import com.thunder.ktv.androidboardtest.function.PlayerVolumeFun;
 import com.thunder.ktv.androidboardtest.function.RolandEffectFun;
+import com.thunder.ktv.androidboardtest.function.PowerFun;
 import com.thunder.ktv.androidboardtest.function.VersionFun;
 import com.thunder.ktv.androidboardtest.function.VideoControlFun;
 import com.thunder.ktv.androidboardtest.player.THPlayer;
@@ -166,12 +167,14 @@ public class MainActivity extends AppCompatActivity {
         list = new ArrayList<>();
         byte[] bytes = new byte[2];
         list.add(new VersionFun());
+        list.add(new PowerFun());
 //        list.add(new GpioSetFun());
         list.add(new VideoControlFun());
         list.add(new KtvBtLineFun());
         list.add(new RolandEffectFun());
 
-        list.add(new BassFun());
+        list.add(new BassSwitchFun());
+        list.add(new BassSeekFun());
         list.add(new MastVolumer());
         list.add(new PlayerVolumeFun());
 

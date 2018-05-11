@@ -196,12 +196,12 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                             buttons[i].setVisibility(View.GONE);
                             continue;
                         }
-                        buttons[i].setText(buttonBase.getName());
+                        buttons[i].setText(buttonBase.name);
                         int finalI = i;
                         buttons[i].setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                buttonBase.doAction();
+                                buttonBase.doAction(null);
                                 textViewInfo.setText(buttonListFun.getShowInfo());
                             }
                         });
@@ -237,6 +237,7 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                             switches[i].setVisibility(View.GONE);
                             continue;
                         }
+                        switches[i].setChecked(switchBase.isChecked);
                         switches[i].setText(switchBase.getName());
                         int finalI = i;
                         textViewNames[i].setText(absFunction.getShowName());
@@ -244,6 +245,7 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                             @Override
                             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                                 switchBase.doAction(isChecked);
+                                switchBase.isChecked = isChecked;
                                 textViewInfo.setText(switchListFun.getShowInfo());
                             }
                         });

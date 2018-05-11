@@ -3,14 +3,15 @@ package com.thunder.ktv.androidboardtest.function.basefun;
 import com.thunder.ktv.androidboardtest.AppHelper;
 import com.thunder.ktv.thunderjni.thunderapi.TDHardwareHelper;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 /**
  * Created by chengkai on 18-2-13.
  */
 
-abstract public class AbsFunction {
+abstract public class AbsFunction{
     private static final String TAG = "AbsFunction";
     private static final String  UART_DEV = "/dev/ttyAMA0";
     protected static final int UART_RATE = 38400;
@@ -26,6 +27,7 @@ abstract public class AbsFunction {
     public final static int FUN_TYPE_VIDEO_CONTROL = 7;
     public final static int FUN_TYPE_MAST_VOLUMER = 8;
     public final static int FUN_TYPE_Bass = 9;
+    public final static int FUN_TYPE_Power = 10;
 
     public int funType = FUN_TYPE_DEF;
     public int showType = 0;
@@ -87,8 +89,6 @@ abstract public class AbsFunction {
     public String showName;
     public byte[] command;
 
-    abstract public boolean doAction(Object o);
-
     public AbsFunction(int funType,int showType,String showName, byte[] command) {
         this.funType = funType;
         this.showType = showType;
@@ -126,4 +126,5 @@ abstract public class AbsFunction {
     {
         return showName;
     }
+    public abstract boolean doAction(Object o);
 }

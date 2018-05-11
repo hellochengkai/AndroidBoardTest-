@@ -16,8 +16,7 @@ public class GpioSetFun extends SwitchListFun {
     String msg = new String();
     public GpioSetFun() {
         super(FUN_TYPE_DEF,"GPIO设置");
-        List<SwitchBase> list = new ArrayList<>();
-        list.add(new SwitchBase() {
+        switchBaseList.add(new SwitchBase() {
             @Override
             public boolean doAction(boolean is) {
                 int ret = 0;
@@ -33,7 +32,7 @@ public class GpioSetFun extends SwitchListFun {
                 return "GPIO 2-3";
             }
         });
-        list.add(new SwitchBase() {
+        switchBaseList.add(new SwitchBase() {
             @Override
             public boolean doAction(boolean is) {
                 int ret = 0;
@@ -49,6 +48,5 @@ public class GpioSetFun extends SwitchListFun {
                 return "GPIO 2-4";
             }
         });
-        setSwitchBaseList(list);
     }
 }

@@ -88,15 +88,23 @@ public class PT2033Helper {
     {
         writeOneByte(b);
     }
-    public void openBass()
+    public void setBass(byte b)
     {
-        AppHelper.showMsg("PT2033 设置低音:" + 0x67);
-        writeOneByte((byte) 0x67);
+        writeOneByte(b);
     }
-    public void closeBass()
+    public int openBass()
     {
-        AppHelper.showMsg("PT2033 设置低音:" + 0x6d);
-        writeOneByte((byte) 0x6d);
+        int openCode = 0x67;
+        AppHelper.showMsg("PT2033 设置低音(open):" + openCode);
+        writeOneByte((byte) openCode);
+        return openCode;
+    }
+    public int closeBass()
+    {
+        int closeCode = 0x6d;
+        AppHelper.showMsg("PT2033 设置低音(close):" + closeCode);
+        writeOneByte((byte) closeCode);
+        return closeCode;
     }
     void showMsg()
     {

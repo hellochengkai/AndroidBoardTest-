@@ -35,42 +35,22 @@ public class VersionFun extends ButtonListFun {
 
     public VersionFun() {
         super(FUN_TYPE_DEF,"版本号");
-        List list = new ArrayList();
-        list.add(new ButtonBase() {
+        buttonBaseList.add(new ButtonBase(null,null,"版本号 Version Request",false) {
             @Override
-            public boolean doAction() {
+            public boolean doAction(Object o) {
                 byte[] bytes = new byte[3];
                 bytes[0] = (byte) 0xbf;bytes[1] = (byte) 0x00;bytes[2] = (byte) 0x00;
-                return getVersion(getName(),bytes);
-            }
-            @Override
-            public String getName() {
-                return "版本号 Version Request";
-            }
-
-            @Override
-            public int getCode() {
-                return 0;
+                return getVersion(name,bytes);
             }
         });
-        list.add(new ButtonBase() {
+        buttonBaseList.add(new ButtonBase(null,null,"内部版本号 Build No Request",false) {
             @Override
-            public boolean doAction() {
+            public boolean doAction(Object o) {
                 byte[] bytes = new byte[3];
                 bytes[0] = (byte) 0xbf;bytes[1] = (byte) 0x04;bytes[2] = (byte) 0x00;
-                return getVersion(getName(),bytes);
-            }
-            @Override
-            public String getName() {
-                return "内部版本号 Build No Request";
-            }
-
-            @Override
-            public int getCode() {
-                return 0;
+                return getVersion(name,bytes);
             }
         });
-        setButtonBaseList(list);
     }
     public String getShowInfo() {
         return msg;

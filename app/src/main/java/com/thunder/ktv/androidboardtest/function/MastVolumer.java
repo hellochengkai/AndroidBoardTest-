@@ -15,6 +15,11 @@ import java.util.logging.Handler;
 public class MastVolumer extends SeekFun{
     private static final String TAG = "MastVolumer";
     byte volume = max;
+
+    private static final byte [] MastVolumUPCode =    {(byte) 0xEF, (byte) 0xc4, (byte) 0x02, (byte) 0xfe};
+    private static final byte [] MastVolumDownCode =    {(byte) 0xEF, (byte) 0xc4, (byte) 0x03, (byte) 0xfe};
+
+
     public MastVolumer() {
         super(FUN_TYPE_MAST_VOLUMER, "主音量", null, (byte) 0x3f,(byte) 0);
         setSetup(3);
