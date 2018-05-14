@@ -94,14 +94,14 @@ public class PT2033Helper {
     }
     public int openBass()
     {
-        int openCode = 0x67;
+        int openCode = 0x6d;
         AppHelper.showMsg("PT2033 设置低音(open):" + openCode);
         writeOneByte((byte) openCode);
         return openCode;
     }
     public int closeBass()
     {
-        int closeCode = 0x6d;
+        int closeCode = 0x67;
         AppHelper.showMsg("PT2033 设置低音(close):" + closeCode);
         writeOneByte((byte) closeCode);
         return closeCode;

@@ -39,4 +39,13 @@ public class EditorFun extends SeekFun {
         return String.format("{%3d%%}Command:%02x %02x %02x,  Min %02x,Max %02x,Def %02x",
                 getCurPercent(command[command.length - 1]), command[0], command[1], command[2],offsetCode,max + offsetCode,def + offsetCode);
     }
+    @Override
+    public byte[] getUpCode() {
+        return null;
+    }
+
+    @Override
+    public byte[] getDownCode() {
+        return null;
+    }
 }

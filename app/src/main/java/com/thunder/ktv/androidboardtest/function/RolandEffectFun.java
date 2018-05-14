@@ -34,15 +34,23 @@ public class RolandEffectFun extends ButtonListFun implements IBindFrontPanel {
         for (int i = 0; i< list.size();i ++){
             int finalI = i;
             RolandPrmFun rolandPrmFun = (RolandPrmFun) list.get(finalI);
-            buttonBaseList.add(new ButtonBase((byte [])RolandPrmCodes[i],(byte [])RolandPrmCBCodes[i],rolandPrmFun.getShowName(),true) {
+            buttonBaseList.add(new ButtonBase(rolandPrmFun.getShowName()) {
+                @Override
+                public byte[] getCode() {
+                    return (byte[]) RolandPrmCodes[finalI];
+                }
+
+                @Override
+                public byte[] getCbCode() {
+                    return (byte [])RolandPrmCBCodes[finalI];
+                }
+
                 @Override
                 public boolean doAction(Object o) {
                     boolean ret = rolandPrmFun.doAction(null);
                     msg = name + ":";
                     msg += rolandPrmFun.getShowInfo();
-                    if(needCallBackCode){
-                        FrontPanelFun.frontPanelWriteCode(callBackCode);
-                    }
+                    FrontPanelFun.frontPanelWriteCode(getCbCode());
                     return ret;
                 }
             });
@@ -50,10 +58,5 @@ public class RolandEffectFun extends ButtonListFun implements IBindFrontPanel {
     }
     public String getShowInfo() {
         return msg;
-    }
-
-    @Override
-    public boolean doAction(Object o) {
-        return AbsFunction.doActionByFrontCodeButtonList(buttonBaseList, (byte[]) o);
     }
 }

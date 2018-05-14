@@ -191,7 +191,7 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     if(i >= buttonListFun.buttonBaseList.size()){
                         buttons[i].setVisibility(View.GONE);
                     }else{
-                        ButtonListFun.ButtonBase buttonBase = buttonListFun.buttonBaseList.get(i);
+                        ButtonListFun.ButtonBase buttonBase = (ButtonListFun.ButtonBase) buttonListFun.buttonBaseList.get(i);
                         if(null == buttonBase){
                             buttons[i].setVisibility(View.GONE);
                             continue;
@@ -232,7 +232,7 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     if(i >= switchListFun.switchBaseList.size()){
                         switches[i].setVisibility(View.GONE);
                     }else{
-                        SwitchListFun.SwitchBase switchBase = switchListFun.switchBaseList.get(i);
+                        SwitchListFun.SwitchBase switchBase = (SwitchListFun.SwitchBase) switchListFun.switchBaseList.get(i);
                         if(null == switchBase){
                             switches[i].setVisibility(View.GONE);
                             continue;

@@ -20,6 +20,16 @@ public class ButtonListFun extends AbsFunction {
         public ButtonBase(String name) {
             this.name = name;
         }
+
+        @Override
+        public byte[] getCode() {
+            return null;
+        }
+
+        @Override
+        public byte[] getCbCode() {
+            return null;
+        }
     }
 
     public ButtonListFun(int funType,String showName) {

@@ -17,19 +17,29 @@ public class VideoControlFun  extends ButtonListFun implements IBindFrontPanel{
         buttonBaseList.add(audioChangeButton);
     }
 
-    ButtonBase audioChangeButton = new ButtonBase(changeAudioCode,null,"切换音轨",true) {
+    ButtonBase audioChangeButton = new ButtonBase("切换音轨") {
+        byte[] needCallBackCode = null;
+        @Override
+        public byte[] getCode() {
+            return changeAudioCode;
+        }
+
+        @Override
+        public byte[] getCbCode() {
+            return needCallBackCode;
+        }
         @Override
         public boolean doAction(Object o) {
+
             int ret = AppHelper.getThPlayer().audio_select();
             msg = name + ":audio_select == " + ret;
             AppHelper.showMsg(msg);
-            if(needCallBackCode){
-                if(ret == 1){
-                    FrontPanelFun.frontPanelWriteCode(originalCBCode);
-                }else{
-                    FrontPanelFun.frontPanelWriteCode(accompanyCBCode);
-                }
+            if(ret == 1){
+                needCallBackCode = originalCBCode;
+            }else{
+                needCallBackCode = accompanyCBCode;
             }
+            FrontPanelFun.frontPanelWriteCode(getCbCode());
             return true;
         }
     };
@@ -37,10 +47,5 @@ public class VideoControlFun  extends ButtonListFun implements IBindFrontPanel{
     @Override
     public String getShowInfo() {
         return msg;
-    }
-
-    @Override
-    public boolean doAction(Object o) {
-        return AbsFunction.doActionByFrontCodeButtonList(buttonBaseList, (byte[]) o);
     }
 }

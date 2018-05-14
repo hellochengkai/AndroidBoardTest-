@@ -5,6 +5,7 @@ import android.util.Log;
 import com.thunder.ktv.androidboardtest.AppHelper;
 import com.thunder.ktv.androidboardtest.function.basefun.AbsFunction;
 import com.thunder.ktv.androidboardtest.function.basefun.IFrontPanelDoAction;
+import com.thunder.ktv.androidboardtest.function.basefun.SeekFun;
 import com.thunder.ktv.androidboardtest.view.MyListViewAdapter;
 import com.thunder.ktv.thunderjni.thunderapi.TDHardwareHelper;
 
@@ -18,169 +19,9 @@ import java.util.List;
 
 public class FrontPanelFun extends AbsFunction {
     private static final String TAG = "FrontPanelFun";
-
-
-    private static final byte [] MusicUPCode =    {(byte) 0xEF, (byte) 0xc1, (byte) 0x02, (byte) 0xfe};
-    private static final byte [] MusicDownCode =    {(byte) 0xEF, (byte) 0xc1, (byte) 0x03, (byte) 0xfe};
-
-    private static final byte [] MicUPCode =    {(byte) 0xEF, (byte) 0xc2, (byte) 0x02, (byte) 0xfe};
-    private static final byte [] MicDownCode =    {(byte) 0xEF, (byte) 0xc2, (byte) 0x03, (byte) 0xfe};
-
-
-
-
-//    private static List ktvBTLineCodeList = new ArrayList();
-//    private static List micCodeList = new ArrayList();
-//    private static List musicCodeList = new ArrayList();
-//    private static List echoCodeList = new ArrayList();
-//    private static List powerCodeList = new ArrayList();
-//    private static List videoControlCodeList = new ArrayList();
-//    private static List mastVolumCodeList = new ArrayList();
-//    private static List bassCodeList = new ArrayList();
-    {
-//        rolandPrmCodeList.add(RolandPrm1Code);
-//        rolandPrmCodeList.add(RolandPrm2Code);
-//        rolandPrmCodeList.add(RolandPrm3Code);
-//        rolandPrmCodeList.add(RolandPrm4Code);
-//
-//        ktvBTLineCodeList.add(KTVCode);
-//        ktvBTLineCodeList.add(BTCode);
-//        ktvBTLineCodeList.add(LINECode);
-//
-//        micCodeList.add(MicUPCode);
-//        micCodeList.add(MicDownCode);
-//
-//        musicCodeList.add(MusicUPCode);
-//        musicCodeList.add(MusicDownCode);
-//
-//        echoCodeList.add(EchoUPCode);
-//        echoCodeList.add(EchoDownCode);
-//
-//        powerCodeList.add(standbyCode);
-//        powerCodeList.add(openCode);
-//
-//        videoControlCodeList.add(originalCode);
-//        videoControlCodeList.add(accompanyCode);
-//
-//        mastVolumCodeList.add(MastVolumUPCode);
-//        mastVolumCodeList.add(MastVolumDownCode);
-//
-//        bassCodeList.add(openBassCode);
-//        bassCodeList.add(closeBassCode);
-    }
-//
-//    private class FrontPanelCode{
-//        boolean needRetCode = false;
-//        int type;
-//        List codeList = null;
-//        public FrontPanelCode(int type,List<byte[]> list,boolean needRetCode) {
-//            this.needRetCode = needRetCode;
-//            codeList = list;
-//            this.type = type;
-//        }
-//        boolean isUpCode(byte [] code)
-//        {
-//            if(code == null)
-//                return false;
-//            return code[2] == 0x02;
-//        }
-//        boolean isDownCode(byte [] code)
-//        {
-//            if(code == null)
-//                return false;
-//            return code[2] == 0x03;
-//        }
-//        boolean hasCode(byte[] bytes)
-//        {
-//            Iterator iterator = codeList.iterator();
-//            while (iterator.hasNext()){
-//                byte[] bytes1 = (byte[]) iterator.next();
-//                if(Arrays.equals(bytes1,bytes)){
-//                    return true;
-//                }
-//            }
-//            return false;
-//        }
-//        String doAction(byte [] code)
-//        {
-//            String info = null;
-//            if(type == FUN_TYPE_DEF)
-//                return info;
-//
-//            Iterator iterator = MyListViewAdapter.list.iterator();
-//            while (iterator.hasNext()){
-//                AbsFunction absFunction = (AbsFunction) iterator.next();
-//                if(type == absFunction.funType){
-//                    if(absFunction instanceof SeekFun){
-//                        SeekFun seekFun = (SeekFun) absFunction;
-//                            if(isUpCode(code)){
-//                                seekFun.up();
-//                                info = seekFun.getShowName() + "  UP";
-//                                AppHelper.getMainActivity().upDataView();
-//                                return info;
-//                            }else if(isDownCode(code)){
-//                                seekFun.down();
-//                                info = seekFun.getShowName() +  "  DOWN";
-//                                AppHelper.getMainActivity().upDataView();
-//                                return info;
-//                            }else{
-//                                if(type == FUN_TYPE_Bass){
-//                                    if(absFunction instanceof BassSeekFun){
-//                                        BassSeekFun bassFun = (BassSeekFun) absFunction;
-//                                        if(Arrays.equals(code,openBassCode)){
-//                                            if(bassFun.changeBass()) {
-//                                                FrontPanelFun.frontPanelWriteCode(openBassCode);
-//                                            }else{
-//                                                FrontPanelFun.frontPanelWriteCode(closeBassCode);
-//                                            }
-//                                        }else if(Arrays.equals(code,closeBassCode)){
-////                                            FrontPanelFun.frontPanelWriteCode(openBassCode);
-//                                        }
-//                                        AppHelper.getMainActivity().upDataView();
-//                                    }
-//                                }
-//                            }
-//
-//                    }else if(absFunction instanceof ButtonListFun){
-//                        ButtonListFun listFun = (ButtonListFun) absFunction;
-//                            listFun.doAction(new Integer(code[2]));
-////                            info = listFun.getShowInfo();
-//                            AppHelper.getMainActivity().upDataView();
-//                            return info;
-//                    }else if(absFunction instanceof SwitchListFun){
-//
-//                    }else {
-//
-//                    }
-//                }
-//            }
-//            return info;
-//        }
-//    }
-
-//    List<FrontPanelCode> frontPanelCodes = null;
-//    void initCode()
-//    {
-//        frontPanelCodes = new ArrayList<FrontPanelCode>();
-//        frontPanelCodes.add(new FrontPanelCode(AbsFunction.FUN_TYPE_Power,powerCodeList,false));
-//        frontPanelCodes.add(new FrontPanelCode(AbsFunction.FUN_TYPE_ECHO_DELAY,echoCodeList,false));
-//        frontPanelCodes.add(new FrontPanelCode(AbsFunction.FUN_TYPE_MIC,micCodeList,false));
-//        frontPanelCodes.add(new FrontPanelCode(AbsFunction.FUN_TYPE_MUSIC,musicCodeList,false));
-//        frontPanelCodes.add(new FrontPanelCode(AbsFunction.FUN_TYPE_MAST_VOLUMER,mastVolumCodeList,false));
-//
-//        frontPanelCodes.add(new FrontPanelCode(AbsFunction.FUN_TYPE_KTV_BT_LINE,ktvBTLineCodeList,true));
-//
-//        frontPanelCodes.add(new FrontPanelCode(AbsFunction.FUN_TYPE_ROLANDEFFECT,rolandPrmCodeList,true));
-//
-//        frontPanelCodes.add(new FrontPanelCode(AbsFunction.FUN_TYPE_VIDEO_CONTROL,videoControlCodeList,true));
-//        frontPanelCodes.add(new FrontPanelCode(AbsFunction.FUN_TYPE_Bass,bassCodeList,false));
-//
-//    }
     ReadCodeRunnable readCodeRunnable = null;
-
     public FrontPanelFun(String showName) {
         super(FUN_TYPE_DEF,MyListViewAdapter.ItemViewTypeSwitch,showName, null);
-//        initCode();
         readCodeRunnable = new ReadCodeRunnable();
         new Thread(readCodeRunnable).start();
     }
@@ -211,31 +52,14 @@ public class FrontPanelFun extends AbsFunction {
                     if(!(absFunction instanceof IBindFrontPanel)){
                         continue;
                     }
+                    if(absFunction instanceof SeekFun){
+                        SeekFun seekFun = (SeekFun) absFunction;
+                        seekFun.doUporDown(bytes);
+                        continue;
+                    }
                     absFunction.doAction(bytes);
-//                    IBindFrontPanel iBindFrontPanel = (IBindFrontPanel) absFunction;
-//                    IFrontPanelDoAction idoAction = iBindFrontPanel.GetDoActionByFrontCode(bytes);
-//                    if(idoAction == null)
-//                        continue;
-//                    idoAction.doAction(bytes);
                     AppHelper.getMainActivity().upDataView();
                 }
-
-//                Iterator iterator = frontPanelCodes.iterator();
-//                while (iterator.hasNext()){
-//                    FrontPanelCode frontPanelCode = (FrontPanelCode) iterator.next();
-//                    if(!frontPanelCode.hasCode(bytes))
-//                        continue;
-//                    if(frontPanelCode.type != FUN_TYPE_DEF){
-//                        String info = frontPanelCode.doAction(bytes);
-//                        if(info != null){
-//                            Log.d(TAG,info);
-//                            AppHelper.showMsg(info);
-//                        }
-//                    }
-//                    if(frontPanelCode.needRetCode){
-//                        FrontPanelFun.frontPanelWriteCode(bytes);
-//                    }
-//                }
             }else{
 //              Log.d(TAG,"read time out");
             }
@@ -267,6 +91,8 @@ public class FrontPanelFun extends AbsFunction {
     }
     public static void frontPanelWriteCode(byte[] bytes)
     {
+        if(bytes == null)
+            return;
         int ret = TDHardwareHelper.nativeWriteUart(fd, bytes, bytes.length);
         ret |= TDHardwareHelper.nativeWriteUart(fd, bytes, bytes.length);
         AppHelper.showMsg("回复前面板码值:" + byteCode2String(bytes) + " X2 ret = " + ret);
@@ -285,13 +111,9 @@ public class FrontPanelFun extends AbsFunction {
                 continue;
             if(Arrays.equals(iFrontPanelDoAction.getCode(),bytes)){
                 iFrontPanelDoAction.doAction(null);
-                if(iFrontPanelDoAction.getCbCode() != null){
-                    frontPanelWriteCode(iFrontPanelDoAction.getCbCode());
-                }
                 return true;
             }
         }
         return false;
     }
-
 }

@@ -3,6 +3,8 @@ package com.thunder.ktv.androidboardtest.function.basefun;
 import com.thunder.ktv.androidboardtest.AppHelper;
 import com.thunder.ktv.androidboardtest.view.MyListViewAdapter;
 
+import java.util.Arrays;
+
 /**
  * Created by chengkai on 18-2-13.
  */
@@ -40,5 +42,18 @@ abstract public class SeekFun extends AbsFunction {
         }
         doAction(cur);
         AppHelper.getMainActivity().upDataView();
+    }
+    public abstract byte[] getUpCode();
+    public abstract byte[] getDownCode();
+    public void doUporDown(byte [] bytes)
+    {
+        if(getUpCode() == null || getDownCode() == null || bytes == null){
+            return;
+        }
+        if(Arrays.equals(bytes,getUpCode())){
+            up();
+        }else if(Arrays.equals(bytes,getDownCode())){
+            down();
+        }
     }
 }

@@ -19,6 +19,7 @@ import com.thunder.ktv.androidboardtest.function.EditorFun;
 import com.thunder.ktv.androidboardtest.function.FrontPanelFun;
 import com.thunder.ktv.androidboardtest.function.KtvBtLineFun;
 import com.thunder.ktv.androidboardtest.function.MastVolumer;
+import com.thunder.ktv.androidboardtest.function.MicFun;
 import com.thunder.ktv.androidboardtest.function.MusicLevelFun;
 import com.thunder.ktv.androidboardtest.function.PlayerVolumeFun;
 import com.thunder.ktv.androidboardtest.function.RolandEffectFun;
@@ -172,14 +173,15 @@ public class MainActivity extends AppCompatActivity {
         list.add(new VideoControlFun());
         list.add(new KtvBtLineFun());
         list.add(new RolandEffectFun());
+        BassSeekFun bassSeekFun = new BassSeekFun();
+        list.add(bassSeekFun);
+        list.add(new BassSwitchFun(bassSeekFun));
 
-        list.add(new BassSwitchFun());
-        list.add(new BassSeekFun());
         list.add(new MastVolumer());
         list.add(new PlayerVolumeFun());
 
-        bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x03;
-        list.add(new EditorFun(AbsFunction.FUN_TYPE_MIC,"麦克风主音量 MIC Master",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x4d));
+
+        list.add(new MicFun());
 
         bytes[0] = (byte) 0xb3;bytes[1] = (byte) 0x02;
         list.add(new EditorFun(AbsFunction.FUN_TYPE_DEF,"音乐变调 Key Control Pitch",bytes,(byte) 0x34,(byte) 0x4c, (byte) 0x40));

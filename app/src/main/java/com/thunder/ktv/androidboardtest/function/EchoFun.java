@@ -7,13 +7,21 @@ import java.util.List;
  * Created by chengkai on 18-3-9.
  */
 
-public class EchoFun extends EditorFun{
+public class EchoFun extends EditorFun implements IBindFrontPanel{
 
     byte[] bytes = null;
     List list = null;
     private static final byte [] EchoUPCode =    {(byte) 0xEF, (byte) 0xc3, (byte) 0x02, (byte) 0xfe};
     private static final byte [] EchoDownCode =    {(byte) 0xEF, (byte) 0xc3, (byte) 0x03, (byte) 0xfe};
+    @Override
+    public byte[] getUpCode() {
+        return EchoUPCode;
+    }
 
+    @Override
+    public byte[] getDownCode() {
+        return EchoDownCode;
+    }
     void initData(int defCode)
     {
         list = new ArrayList();

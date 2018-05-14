@@ -18,16 +18,29 @@ public class PowerFun extends SwitchListFun {
         super(FUN_TYPE_Power, "待机开关");
         switchBaseList.add(new SwitchBase() {
             @Override
-            public boolean doAction(boolean is) {
-                if(is){
+            public byte[] getCode() {
+                // TODO: 18-5-14  
+                return new byte[0];
+            }
+
+            @Override
+            public byte[] getCbCode() {
+                // TODO: 18-5-14
+                return new byte[0];
+            }
+
+            @Override
+            public boolean doAction(Object o) {
+                if((boolean)o){
                     FrontPanelFun.frontPanelWriteCode(openCode);
                     AppHelper.showMsg("发送开机指令");
                 }else{
                     FrontPanelFun.frontPanelWriteCode(standbyCode);
                     AppHelper.showMsg("发送待机指令");
                 }
-                return is;
+                return (boolean) o;
             }
+
 
             @Override
             public String getName() {

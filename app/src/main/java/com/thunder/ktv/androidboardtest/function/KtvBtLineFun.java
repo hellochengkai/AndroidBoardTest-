@@ -19,44 +19,68 @@ public class KtvBtLineFun extends ButtonListFun implements IBindFrontPanel{
     private static final byte [] BTCBCode =    {(byte) 0xEF, (byte) 0xc8, (byte) 0x0b, (byte) 0xfe};
     private static final byte [] LINECBCode =    {(byte) 0xEF, (byte) 0xc8, (byte) 0x0c, (byte) 0xfe};
 
-    private ButtonBase ktvButtonBase = new ButtonBase(KTVCode,KTVCBCode,"KTV模式",true) {
+    private ButtonBase ktvButtonBase = new ButtonBase("KTV模式") {
+        @Override
+        public byte[] getCode() {
+            return KTVCode;
+        }
+
+        @Override
+        public byte[] getCbCode() {
+            return KTVCBCode;
+        }
+
         @Override
         public boolean doAction(Object o) {
             showInfo = "当前模式:" + name;
             setGPIO(gpioA,0);
             setGPIO(gpioB,0);
             AppHelper.showMsg( name + ":切换成功");
-            if(needCallBackCode){
-                FrontPanelFun.frontPanelWriteCode(callBackCode);
-            }
+            FrontPanelFun.frontPanelWriteCode(getCbCode());
             return false;
         }
     };
 
-    private ButtonBase btButtonBase = new ButtonBase(BTCode,BTCBCode,"蓝牙模式",true) {
+    private ButtonBase btButtonBase = new ButtonBase("蓝牙模式") {
+        @Override
+        public byte[] getCode() {
+            return BTCode;
+        }
+
+        @Override
+        public byte[] getCbCode() {
+            return BTCBCode;
+        }
+
         @Override
         public boolean doAction(Object o) {
             showInfo = "当前模式:" + name;
             setGPIO(gpioA,1);
             setGPIO(gpioB,0);
             AppHelper.showMsg( name + ":切换成功");
-            if(needCallBackCode){
-                FrontPanelFun.frontPanelWriteCode(callBackCode);
-            }
+            FrontPanelFun.frontPanelWriteCode(getCbCode());
             return false;
         }
     };
 
-    private ButtonBase lineButtonBase = new ButtonBase(LINECode,LINECBCode,"线路输入模式",true) {
+    private ButtonBase lineButtonBase = new ButtonBase("线路输入模式") {
+        @Override
+        public byte[] getCode() {
+            return LINECode;
+        }
+
+        @Override
+        public byte[] getCbCode() {
+            return LINECBCode;
+        }
+
         @Override
         public boolean doAction(Object o) {
             showInfo = "当前模式:" + name;
             setGPIO(gpioA,0);
             setGPIO(gpioB,1);
             AppHelper.showMsg( name + ":切换成功");
-            if(needCallBackCode){
-                FrontPanelFun.frontPanelWriteCode(callBackCode);
-            }
+            FrontPanelFun.frontPanelWriteCode(getCbCode());
             return false;
         }
     };
@@ -78,10 +102,5 @@ public class KtvBtLineFun extends ButtonListFun implements IBindFrontPanel{
     @Override
     public String getShowInfo() {
         return showInfo;
-    }
-
-    @Override
-    public boolean doAction(Object o) {
-        return ButtonListFun.GetDoActionByFrontCodeButtonList(buttonBaseList, (byte[]) o).doAction(null);
     }
 }

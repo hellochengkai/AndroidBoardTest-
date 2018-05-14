@@ -12,7 +12,7 @@ import java.util.logging.Handler;
  * Created by chengkai on 18-5-10.
  */
 
-public class MastVolumer extends SeekFun{
+public class MastVolumer extends SeekFun implements IBindFrontPanel{
     private static final String TAG = "MastVolumer";
     byte volume = max;
 
@@ -41,6 +41,15 @@ public class MastVolumer extends SeekFun{
         return false;
     }
 
+    @Override
+    public byte[] getUpCode() {
+        return MastVolumUPCode;
+    }
+
+    @Override
+    public byte[] getDownCode() {
+        return MastVolumDownCode;
+    }
     @Override
     public String getShowInfo()
     {

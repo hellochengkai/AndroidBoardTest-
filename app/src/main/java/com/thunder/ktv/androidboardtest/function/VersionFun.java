@@ -35,7 +35,7 @@ public class VersionFun extends ButtonListFun {
 
     public VersionFun() {
         super(FUN_TYPE_DEF,"版本号");
-        buttonBaseList.add(new ButtonBase(null,null,"版本号 Version Request",false) {
+        buttonBaseList.add(new ButtonBase("版本号 Version Request") {
             @Override
             public boolean doAction(Object o) {
                 byte[] bytes = new byte[3];
@@ -43,7 +43,7 @@ public class VersionFun extends ButtonListFun {
                 return getVersion(name,bytes);
             }
         });
-        buttonBaseList.add(new ButtonBase(null,null,"内部版本号 Build No Request",false) {
+        buttonBaseList.add(new ButtonBase("内部版本号 Build No Request") {
             @Override
             public boolean doAction(Object o) {
                 byte[] bytes = new byte[3];

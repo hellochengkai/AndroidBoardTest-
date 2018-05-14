@@ -18,15 +18,26 @@ public class GpioSetFun extends SwitchListFun {
         super(FUN_TYPE_DEF,"GPIO设置");
         switchBaseList.add(new SwitchBase() {
             @Override
-            public boolean doAction(boolean is) {
+            public byte[] getCode() {
+                return new byte[0];
+            }
+
+            @Override
+            public byte[] getCbCode() {
+                return new byte[0];
+            }
+
+            @Override
+            public boolean doAction(Object o) {
                 int ret = 0;
                 int gpio = 2 * 8 + 3;
-                int vol = (boolean) is?1:0;
+                int vol = (boolean) o?1:0;
                 ret = TDHardwareHelper.nativeSetGPIO(gpio,vol);
                 msg = String.format("设置%s : vol %d, ret %d",showName,vol,ret);
                 AppHelper.showMsg(msg);
                 return true;
             }
+
             @Override
             public String getName() {
                 return "GPIO 2-3";
@@ -34,16 +45,26 @@ public class GpioSetFun extends SwitchListFun {
         });
         switchBaseList.add(new SwitchBase() {
             @Override
-            public boolean doAction(boolean is) {
+            public byte[] getCode() {
+                return new byte[0];
+            }
+
+            @Override
+            public byte[] getCbCode() {
+                return new byte[0];
+            }
+
+            @Override
+            public boolean doAction(Object o) {
                 int ret = 0;
                 int gpio = 2 * 8 + 4;
-                int vol = (boolean) is?1:0;
+                int vol = (boolean) o?1:0;
                 ret = TDHardwareHelper.nativeSetGPIO(gpio,vol);
                 msg = String.format("设置%s : vol %d, ret %d",showName,vol,ret);
                 AppHelper.showMsg(msg);
                 return true;
             }
-            @Override
+
             public String getName() {
                 return "GPIO 2-4";
             }

@@ -22,4 +22,14 @@ public class PlayerVolumeFun extends SeekFun {
         return String.format("设置音量 %d",
                 cur);
     }
+
+    @Override
+    public byte[] getUpCode() {
+        return null;
+    }
+
+    @Override
+    public byte[] getDownCode() {
+        return null;
+    }
 }

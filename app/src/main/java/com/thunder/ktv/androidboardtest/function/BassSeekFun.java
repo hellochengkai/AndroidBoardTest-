@@ -23,10 +23,23 @@ public class BassSeekFun extends SeekFun {
         AppHelper.showMsg("设置重低音:" + msg);
         return false;
     }
-
+    public void setCur(int cur)
+    {
+        super.cur = cur;
+    }
     int[] codeTable = {-14,-12,-10,-8,-6,-4,-2,0,14,12,10,8,6,4,2,0};
     @Override
     public String getShowInfo() {
         return getShowName() + msg;
+    }
+
+    @Override
+    public byte[] getUpCode() {
+        return null;
+    }
+
+    @Override
+    public byte[] getDownCode() {
+        return null;
     }
 }

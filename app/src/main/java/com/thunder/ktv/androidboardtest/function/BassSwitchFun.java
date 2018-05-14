@@ -31,8 +31,10 @@ public class BassSwitchFun extends SwitchListFun implements IBindFrontPanel{
         AppHelper.showMsg("设置重低音:" + msg);
     }
 
-    public BassSwitchFun() {
+    private BassSeekFun bassSeekFun = null;
+    public BassSwitchFun(BassSeekFun seekFun) {
         super(FUN_TYPE_Bass, "设置重低音:");
+        bassSeekFun = seekFun;
         switchBaseList.add(new SwitchBase() {
             @Override
             public byte[] getCode() {
@@ -49,13 +51,18 @@ public class BassSwitchFun extends SwitchListFun implements IBindFrontPanel{
             }
             @Override
             public boolean doAction(Object o) {
-                isChecked = (boolean) o;
                 isChecked =!isChecked;
                 if(isChecked){
                     openBass();
                 }else{
                     closeBass();
                 }
+                if(bassSeekFun != null){
+                    bassSeekFun.setCur(cur);
+                    bassSeekFun.doAction(cur);
+                    AppHelper.getMainActivity().upDataView();
+                }
+                FrontPanelFun.frontPanelWriteCode(getCbCode());
                 return false;
             }
 
