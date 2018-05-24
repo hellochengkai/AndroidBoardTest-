@@ -18,6 +18,7 @@ import com.thunder.ktv.androidboardtest.function.basefun.AbsFunction;
 import com.thunder.ktv.androidboardtest.function.basefun.ButtonListFun;
 import com.thunder.ktv.androidboardtest.function.basefun.SeekFun;
 import com.thunder.ktv.androidboardtest.function.basefun.SwitchListFun;
+import com.thunder.ktv.thunderjni.until.Logger;
 
 import java.util.List;
 
@@ -118,7 +119,7 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @Override
         public void OnBindViewHolder(AbsFunction absFunction,int position) {
             textViewName.setText(absFunction.getShowName());
-
+            Log.d(TAG, "OnBindViewHolder: position " + position);
             if(!( absFunction instanceof SeekFun)){
                 return;
             }
@@ -158,6 +159,7 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             seekbar_up.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Logger.debug(TAG,"position == " + position);
                     int progress = seekbar.getProgress() + 1;
                     if(progress > seekbar.getMax()){
                         progress = seekbar.getMax();
@@ -201,6 +203,7 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         buttons[i].setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                Logger.debug(TAG,"position == " + position);
                                 buttonBase.doAction(null);
                                 textViewInfo.setText(buttonListFun.getShowInfo());
                             }
@@ -210,7 +213,6 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
             textViewInfo.setText(absFunction.getShowInfo());
         }
-
     }
     private static class ViewHolderSwitch extends MYViewHolder {
         TextView textViewInfo;
@@ -244,6 +246,7 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         switches[i].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                Logger.debug(TAG,"position == " + position);
                                 switchBase.doAction(isChecked);
                                 switchBase.isChecked = isChecked;
                                 textViewInfo.setText(switchListFun.getShowInfo());

@@ -1,10 +1,14 @@
 package com.thunder.ktv.androidboardtest;
 
+import android.os.Build;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+//import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -37,6 +41,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
+
+import static android.widget.AbsListView.OnScrollListener.SCROLL_STATE_IDLE;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -97,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
     }
     List<AbsFunction> list = null;
     MyListViewAdapter mAdapter = null;
+
     public void upDataView()
     {
         handler.post(new Runnable() {
@@ -118,6 +125,47 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(mLayoutManager);
         // 设置adapter
         recyclerView.setAdapter(mAdapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                //屏幕中最后一个可见子项的position
+                int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+                Log.d(TAG, "onScrollStateChanged: 屏幕中最后一个可见子项的position " + lastVisibleItemPosition);
+
+                //当前屏幕所看到的子项个数
+                int visibleItemCount = layoutManager.getChildCount();
+                Log.d(TAG, "onScrollStateChanged: 当前屏幕所看到的子项个数 " + visibleItemCount);
+
+                //当前RecyclerView的所有子项个数
+                int totalItemCount = layoutManager.getItemCount();
+                Log.d(TAG, "onScrollStateChanged: 当前RecyclerView的所有子项个数 " + totalItemCount);
+
+                //RecyclerView的滑动状态
+                int state = recyclerView.getScrollState();
+                Log.d(TAG, "onScrollStateChanged: RecyclerView的滑动状态 " + state);
+
+                if(visibleItemCount > 0 && lastVisibleItemPosition == totalItemCount - 1 && state == recyclerView.SCROLL_STATE_IDLE){
+                    Log.d(TAG, "onScrollStateChanged: aaaa " );
+                }else {
+                    Log.d(TAG, "onScrollStateChanged: bbbbbbb " );
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                Log.d(TAG, "onScrolled: " + dx);
+                Log.d(TAG, "onScrolled: " + dy);
+            }
+        });
         buttonClear = findViewById(R.id.bt_clear);
         buttonClear.setOnClickListener(new View.OnClickListener() {
             @Override
