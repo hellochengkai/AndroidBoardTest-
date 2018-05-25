@@ -78,7 +78,7 @@ public class PT2033Helper {
 
     private int writeOneByte(byte b)
     {
-        int ret = TDHardwareHelper.nativeI2C1WriteOneByte(PT2033_ADDRESS,0,1,b);
+        int ret = TDHardwareHelper.nativeI2C1WriteOneByte(PT2033_ADDRESS,b,1,b);
         msg = String.format("0x%x",b)  + ":" + codeToBinaryStr(b) + String.format("(%s)",ret==0?"成功":"失败" );
         showMsg();
         return ret;
