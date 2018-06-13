@@ -22,15 +22,19 @@ public class RolandPrmFun extends AbsFunction {
     private static final String TAG = "RolandPrmFun";
 
     List<byte[]> codeList = null;
-    public RolandPrmFun(String showName,String path) {
+    public RolandPrmFun(String showName,String path,boolean needRunInThread) {
         super(FUN_TYPE_DEF,MyListViewAdapter.ItemViewTypeButton,showName, null);
         codeList = new ArrayList<>();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                loadCode(path);
-            }
-        }).start();
+        if(needRunInThread){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    loadCode(path);
+                }
+            }).start();
+        }else {
+            loadCode(path);
+        }
     }
     private boolean isInit = false;
     private byte [] head = new byte[16];

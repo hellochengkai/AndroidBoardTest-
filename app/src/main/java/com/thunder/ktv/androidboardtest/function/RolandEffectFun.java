@@ -27,10 +27,10 @@ public class RolandEffectFun extends ButtonListFun implements IBindFrontPanel {
     public RolandEffectFun() {
         super(FUN_TYPE_ROLANDEFFECT,"效果");
         List list = new ArrayList();
-        list.add(new RolandPrmFun("默认效果","/sdcard/roland/02.prm"));
-        list.add(new RolandPrmFun("效果1","/sdcard/roland/01.prm"));
-        list.add(new RolandPrmFun("效果3","/sdcard/roland/03.prm"));
-        list.add(new RolandPrmFun("效果4","/sdcard/roland/04.prm"));
+        list.add(new RolandPrmFun("默认效果","/sdcard/roland/01.prm",false));
+        list.add(new RolandPrmFun("效果2","/sdcard/roland/02.prm",true));
+        list.add(new RolandPrmFun("效果3","/sdcard/roland/03.prm",true));
+        list.add(new RolandPrmFun("效果4","/sdcard/roland/04.prm",true));
         for (int i = 0; i< list.size();i ++){
             int finalI = i;
             RolandPrmFun rolandPrmFun = (RolandPrmFun) list.get(finalI);
@@ -58,5 +58,9 @@ public class RolandEffectFun extends ButtonListFun implements IBindFrontPanel {
     }
     public String getShowInfo() {
         return msg;
+    }
+    public void doDefaultEffect()
+    {
+        buttonBaseList.get(0).doAction(null);
     }
 }

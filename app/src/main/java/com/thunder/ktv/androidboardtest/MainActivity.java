@@ -16,8 +16,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.thunder.ktv.androidboardtest.function.BassSeekFun;
-import com.thunder.ktv.androidboardtest.function.BassSwitchFun;
 import com.thunder.ktv.androidboardtest.function.EchoFun;
 import com.thunder.ktv.androidboardtest.function.EditorFun;
 import com.thunder.ktv.androidboardtest.function.FrontPanelFun;
@@ -41,8 +39,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
-
-import static android.widget.AbsListView.OnScrollListener.SCROLL_STATE_IDLE;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -113,7 +109,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    void initview()
+
+
+    private void playNextSong()
+    {
+        curPlayIndex++;
+        if(curPlayIndex >= thPlayerList.length){
+            curPlayIndex = 0;
+        }
+    }
+    private void playFrontSong()
+    {
+        curPlayIndex--;
+        if(curPlayIndex < 0){
+            curPlayIndex = thPlayerList.length - 1;
+        }
+    }
+    private void initview()
     {
         Button button = new Button(getApplicationContext());
         button.setText("asasa");
@@ -188,10 +200,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                     thPlayer.play(thPlayerList[curPlayIndex],holder);
-                    curPlayIndex++;
-                    if(curPlayIndex >= thPlayerList.length){
-                        curPlayIndex = 0;
-                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -208,35 +216,33 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         findViewById(R.id.bt_audio_select).setOnClickListener(onClickListener);
-        findViewById(R.id.bt_video_select).setOnClickListener(onClickListener);
+        findViewById(R.id.bt_video_front).setOnClickListener(onClickListener);
+        findViewById(R.id.bt_video_next).setOnClickListener(onClickListener);
+        findViewById(R.id.bt_video_replay).setOnClickListener(onClickListener);
     }
     FrontPanelFun frontPanelFun = null;
     void initData(){
         frontPanelFun = new FrontPanelFun("前面版控制开关");
         list = new ArrayList<>();
         byte[] bytes = new byte[2];
+
         list.add(new VersionFun());
         list.add(new PowerFun());
+
+        list.add(new MastVolumer());
+        list.add(new EchoFun());
+        list.add(new MicFun());
+        list.add(new MusicLevelFun());
+
 //        list.add(new GpioSetFun());
         list.add(new VideoControlFun());
         list.add(new KtvBtLineFun());
-        list.add(new RolandEffectFun());
-        BassSeekFun bassSeekFun = new BassSeekFun();
-        list.add(bassSeekFun);
-        list.add(new BassSwitchFun(bassSeekFun));
-
-        list.add(new MastVolumer());
+        RolandEffectFun rolandEffectFun = new RolandEffectFun();
+        rolandEffectFun.doDefaultEffect();
+        list.add(rolandEffectFun);
         list.add(new PlayerVolumeFun());
-
-
-        list.add(new MicFun());
-
         bytes[0] = (byte) 0xb3;bytes[1] = (byte) 0x02;
         list.add(new EditorFun(AbsFunction.FUN_TYPE_DEF,"音乐变调 Key Control Pitch",bytes,(byte) 0x34,(byte) 0x4c, (byte) 0x40));
-
-        list.add(new MusicLevelFun());
-
-        list.add(new EchoFun());
 
         bytes[0] = (byte) 0xb0;bytes[1] = (byte) 0x0c;
         list.add(new EditorFun(AbsFunction.FUN_TYPE_DEF,"AUX到音乐 AUX to MUSIC Level",bytes,(byte) 0x00,(byte) 0x7f, (byte) 0x00));
@@ -275,7 +281,21 @@ public class MainActivity extends AppCompatActivity {
                     button.setText("切换音轨 " +  thPlayer.audio_select());
                     break;
                 }
-                case R.id.bt_video_select:{
+                case R.id.bt_video_front:{
+                    playFrontSong();
+                    SurfaceView surfaceView = findViewById(R.id.surface);
+                    surfaceView.setVisibility(View.GONE);
+                    surfaceView.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case R.id.bt_video_next:{
+                    playNextSong();
+                    SurfaceView surfaceView = findViewById(R.id.surface);
+                    surfaceView.setVisibility(View.GONE);
+                    surfaceView.setVisibility(View.VISIBLE);
+                    break;
+                }
+                case R.id.bt_video_replay:{
                     SurfaceView surfaceView = findViewById(R.id.surface);
                     surfaceView.setVisibility(View.GONE);
                     surfaceView.setVisibility(View.VISIBLE);
