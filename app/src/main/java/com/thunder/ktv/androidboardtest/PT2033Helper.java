@@ -17,7 +17,8 @@ public class PT2033Helper {
             (byte) 0xf0,//右声道扬声器衰减到-20dB
             (byte) 0x80,//sub声道扬声器衰减到0dB
             (byte) 0x48,//切换声道1,增益7.5dB，响度开
-            (byte) 0x7f //treble 0dB
+            (byte) 0x7f,//treble 0dB
+            (byte) 0x6f //bass 0dB
     };
     private static String[] InitCoedInfo = {
             "音量衰减为0dB",//
@@ -25,7 +26,8 @@ public class PT2033Helper {
             "右声道扬声器衰减到-20dB",//
             "sub声道扬声器衰减到0dB",//
             "切换声道1,增益7.5dB，响度开",//
-            "treble 0dB" //
+            "treble 0dB" ,//
+            "bass 0dB" //
     };
     private PT2033Helper()
     {

@@ -26,6 +26,7 @@ import com.thunder.ktv.androidboardtest.function.MusicLevelFun;
 import com.thunder.ktv.androidboardtest.function.PlayerVolumeFun;
 import com.thunder.ktv.androidboardtest.function.RolandEffectFun;
 import com.thunder.ktv.androidboardtest.function.PowerFun;
+import com.thunder.ktv.androidboardtest.function.SpeakerOutputFun;
 import com.thunder.ktv.androidboardtest.function.VersionFun;
 import com.thunder.ktv.androidboardtest.function.VideoControlFun;
 import com.thunder.ktv.androidboardtest.player.THPlayer;
@@ -222,6 +223,9 @@ public class MainActivity extends AppCompatActivity {
     }
     FrontPanelFun frontPanelFun = null;
     void initData(){
+        RolandEffectFun rolandEffectFun = new RolandEffectFun();
+        rolandEffectFun.doDefaultEffect();//先设置默认效果
+
         frontPanelFun = new FrontPanelFun("前面版控制开关");
         list = new ArrayList<>();
         byte[] bytes = new byte[2];
@@ -229,7 +233,8 @@ public class MainActivity extends AppCompatActivity {
         list.add(new VersionFun());
         list.add(new PowerFun());
 
-        list.add(new MastVolumer());
+        list.add(new SpeakerOutputFun());
+//        list.add(new MastVolumer());
         list.add(new EchoFun());
         list.add(new MicFun());
         list.add(new MusicLevelFun());
@@ -237,8 +242,6 @@ public class MainActivity extends AppCompatActivity {
 //        list.add(new GpioSetFun());
         list.add(new VideoControlFun());
         list.add(new KtvBtLineFun());
-        RolandEffectFun rolandEffectFun = new RolandEffectFun();
-        rolandEffectFun.doDefaultEffect();
         list.add(rolandEffectFun);
         list.add(new PlayerVolumeFun());
         bytes[0] = (byte) 0xb3;bytes[1] = (byte) 0x02;

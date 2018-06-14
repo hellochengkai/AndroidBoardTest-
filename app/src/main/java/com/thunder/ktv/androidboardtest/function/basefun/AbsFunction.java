@@ -71,6 +71,19 @@ abstract public class AbsFunction{
             return true;
         }
     }
+    public synchronized static boolean writeCode(byte[] code,String msg) {
+        if(code == null){
+            return false;
+        }
+        int writeLen = TDHardwareHelper.nativeWriteUart(fd, code, code.length);
+        if(writeLen != code.length){
+            AppHelper.showMsg(UART_DEV + " [Tx error]:" + byteCode2String(code) + "  " + msg);
+            return false;
+        }else{
+            AppHelper.showMsg(UART_DEV + " [Tx]:" + byteCode2String(code) + "  " + msg);
+            return true;
+        }
+    }
     public static void openDev() {
         fd = TDHardwareHelper.nativeOpenUart(UART_DEV.getBytes(),UART_RATE);
         if(fd < 0){

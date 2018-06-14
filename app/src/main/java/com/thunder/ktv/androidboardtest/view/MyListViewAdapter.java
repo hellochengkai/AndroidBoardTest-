@@ -60,15 +60,6 @@ public class MyListViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public static List<AbsFunction> list = null;
     public MyListViewAdapter(List<AbsFunction> list) {
         this.list = list;
-//        seekMap = new HashMap<>();
-//        for (int i = 0;i< list.size();i++){
-//            if(list.get(i).showType == ItemViewTypeSeekBar){
-//                if(list.get(i) instanceof SeekFun){
-//                    SeekFun seekFun = (SeekFun) list.get(i);
-//                    seekMap.put(i,seekFun);
-//                }
-//            }
-//        }
     }
 
     @Override

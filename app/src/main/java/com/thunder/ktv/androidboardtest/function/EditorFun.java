@@ -16,6 +16,7 @@ public class EditorFun extends SeekFun {
         if(command != null){
             this.command[this.command.length - 1] = defCode;
         }
+        writeCode(this.command,showName);
     }
 
     int getCurPercent(byte code)
@@ -31,7 +32,7 @@ public class EditorFun extends SeekFun {
     public boolean doAction(Object o) {
         int code = (int) o;
         command[command.length - 1] = (byte) ((byte) code + this.offsetCode);
-        return writeCode(command);
+        return writeCode(command,showName);
     }
 
     public String getShowInfo()
